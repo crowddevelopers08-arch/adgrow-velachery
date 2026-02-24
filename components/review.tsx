@@ -34,14 +34,14 @@ export default function CTABanner() {
 
         .cta-fade-up {
           opacity: 0;
-          transform: translateY(36px);
+          transform: translateY(20px);
           transition: opacity 0.7s ease, transform 0.7s ease;
         }
         .cta-fade-up.on { opacity: 1; transform: translateY(0); }
 
         .cta-fade-right {
           opacity: 0;
-          transform: translateX(40px);
+          transform: translateX(20px);
           transition: opacity 0.8s ease, transform 0.8s ease;
         }
         .cta-fade-right.on { opacity: 1; transform: translateX(0); }
@@ -189,20 +189,27 @@ export default function CTABanner() {
             gap: 0.5rem;
           }
         }
+
+        /* OVERFLOW FIX */
+        .cta-section-wrapper {
+          overflow: hidden;
+          width: 100%;
+          max-width: 100vw;
+        }
       `}</style>
 
       <section
         ref={ref}
-        className="w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-32"
+        className="cta-section-wrapper w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-32"
         style={{
           background:
             "linear-gradient(135deg, #fff0f6 0%, #fce7f3 50%, #fdf2f8 100%)",
           fontFamily: "'Lato', sans-serif",
         }}
       >
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-8 sm:gap-10 md:gap-12 lg:gap-16">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-8 sm:gap-10 md:gap-12 lg:gap-16" style={{ overflow: 'visible' }}>
           {/* ── LEFT: Text Content ── */}
-          <div className="flex-1 flex flex-col items-start gap-4 sm:gap-5 text-left w-full">
+          <div className="flex-1 flex flex-col items-start gap-4 sm:gap-5 text-left w-full" style={{ overflow: 'visible' }}>
             {/* Eyebrow */}
             <div
               className={`cta-fade-up cta-d1 ${visible ? "on" : ""} inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-pink-300 bg-white/70 backdrop-blur-sm`}
@@ -316,6 +323,7 @@ export default function CTABanner() {
           {/* ── RIGHT: Doctor Image ── */}
           <div
             className={`cta-fade-right cta-d3 ${visible ? "on" : ""} flex-shrink-0 flex items-center justify-center w-full lg:w-auto`}
+            style={{ overflow: 'visible' }}
           >
             <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 mx-auto">
               {/* Decorative spinning ring */}
