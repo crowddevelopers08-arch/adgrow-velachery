@@ -280,7 +280,6 @@
 //   )
 // }
 
-
 "use client"
 
 import React, { useState, useEffect } from 'react';
@@ -297,19 +296,19 @@ const slides: Slide[] = [
   {
     url: "/banner2.jpg",
     rightImage: "/before1.webp",   // ✅ change to your image
-    headline: <>Discover <span style={{ color: '#f9a8d4' }}>Velachery's Secret</span> To Beautiful Skin</>,
+    headline: <>Discover <span style={{ color: '#1a1a1a' }}>Velachery's Secret</span> To Beautiful Skin</>,
     sub: "Achieve your desired look with our Expert Beauty Solutions",
   },
   {
     url: "/banners.jpg",
     rightImage: "/before2.webp",   // ✅ change to your image
-    headline: <>Glow Like Never <span style={{ color: '#f9a8d4' }}>Before With Us</span></>,
+    headline: <>Glow Like Never <span style={{ color: '#1a1a1a' }}>Before With Us</span></>,
     sub: "Premium skincare treatments tailored just for you",
   },
   {
     url: "/banner3.jpg",
     rightImage: "/before3.webp",   // ✅ change to your image
-    headline: <>Your Beauty Journey <span style={{ color: '#f9a8d4' }}>Starts Here</span></>,
+    headline: <>Your Beauty Journey <span style={{ color: '#1a1a1a' }}>Starts Here</span></>,
     sub: "Step in and experience the difference expert care makes",
   },
 ]
@@ -555,7 +554,7 @@ export default function VelacheryBeautyBanner() {
 
         /* Floating pill tag */
         .vbb-tag {
-          position: absolute; bottom: 18px; left: 18px; z-index: 6;
+          position: absolute; bottom: 40px; left: 18px; z-index: 6;
           background: rgba(0,0,0,0.65);
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
@@ -621,7 +620,7 @@ export default function VelacheryBeautyBanner() {
           .vbb-sub     { text-align: center; max-width: 100%; }
           .vbb-dots    { justify-content: center; }
           .vbb-right   { order: 1; height: auto; }
-          .vbb-frame   { max-width: 100%; height: clamp(240px, 42vw, 380px); border-radius: 16px; }
+          .vbb-frame   { max-width: 100%; height: clamp(320px, 56vw, 480px); border-radius: 16px; }
           .vbb-headline { font-size: clamp(1.7rem, 5vw, 2.4rem); }
         }
         @media (max-width: 600px) {
@@ -630,7 +629,7 @@ export default function VelacheryBeautyBanner() {
           .vbb-eyebrow  { font-size: 0.62rem; letter-spacing: 0.16em; margin-bottom: 0.75rem; }
           .vbb-headline { font-size: clamp(1.55rem, 6.5vw, 2.1rem); margin-bottom: 0.85rem; }
           .vbb-sub      { font-size: 0.87rem; margin-bottom: 1.5rem; }
-          .vbb-frame    { height: clamp(220px, 44vw, 340px); border-radius: 14px; }
+          .vbb-frame    { height: clamp(300px, 58vw, 420px); border-radius: 14px; }
           .vbb-tag      { bottom: 12px; left: 12px; padding: 6px 13px; }
           .vbb-tag-text { font-size: 0.62rem; }
           .vbb-btn      { font-size: 0.87rem; padding: 0.82rem 1.8rem; width: 100%; }
@@ -640,7 +639,7 @@ export default function VelacheryBeautyBanner() {
         @media (max-width: 480px) {
           .vbb-root    { min-height: clamp(640px, 105vw, 820px); }
           .vbb-content { padding: 36px 16px 44px; gap: 20px; min-height: clamp(640px, 105vw, 820px); }
-          .vbb-frame   { height: clamp(200px, 48vw, 300px); border-radius: 12px; }
+          .vbb-frame   { height: clamp(280px, 62vw, 380px); border-radius: 12px; }
           .vbb-headline { font-size: clamp(1.4rem, 7.5vw, 2rem); }
           .vbb-sub     { font-size: 0.84rem; margin-bottom: 1.25rem; }
           .vbb-btn     { font-size: 0.84rem; padding: 0.78rem 1.6rem; }
@@ -649,7 +648,7 @@ export default function VelacheryBeautyBanner() {
         @media (max-width: 375px) {
           .vbb-root    { min-height: clamp(620px, 110vw, 800px); }
           .vbb-content { padding: 30px 14px 40px; gap: 18px; min-height: clamp(620px, 110vw, 800px); }
-          .vbb-frame   { height: clamp(185px, 46vw, 270px); border-radius: 10px; }
+          .vbb-frame   { height: clamp(260px, 65vw, 350px); border-radius: 10px; }
           .vbb-headline { font-size: clamp(1.3rem, 8vw, 1.85rem); }
           .vbb-sub     { font-size: 0.82rem; }
           .vbb-btn     { font-size: 0.8rem; padding: 0.74rem 1.4rem; }
@@ -657,7 +656,7 @@ export default function VelacheryBeautyBanner() {
         @media (max-width: 320px) {
           .vbb-root    { min-height: clamp(600px, 115vw, 780px); }
           .vbb-content { padding: 26px 12px 36px; gap: 16px; min-height: clamp(600px, 115vw, 780px); }
-          .vbb-frame   { height: clamp(170px, 44vw, 250px); border-radius: 9px; }
+          .vbb-frame   { height: clamp(240px, 68vw, 320px); border-radius: 9px; }
           .vbb-headline { font-size: 1.22rem; }
           .vbb-sub     { font-size: 0.78rem; }
           .vbb-btn     { font-size: 0.76rem; padding: 0.7rem 1.2rem; }
@@ -755,11 +754,6 @@ export default function VelacheryBeautyBanner() {
               ))}
 
               <div className="vbb-frame-overlay" />
-
-              <div className="vbb-tag">
-                <div className="vbb-tag-dot" />
-                <span className="vbb-tag-text">Advanced Gloskin</span>
-              </div>
             </div>
           </div>
 
