@@ -296,19 +296,19 @@ const slides: Slide[] = [
   {
     url: "/banner2.jpg",
     rightImage: "/before1.webp",   // ✅ change to your image
-    headline: <>Discover <span style={{ color: '#1a1a1a' }}>Velachery's Secret</span> To Beautiful Skin</>,
+    headline: <>Discover <span style={{ color: '#ffffff', backgroundColor: '#f472b6',paddingLeft: '10px', paddingRight: '10px' }}>Velachery's Secret</span> To Beautiful Skin</>,
     sub: "Achieve your desired look with our Expert Beauty Solutions",
   },
   {
     url: "/banners.jpg",
     rightImage: "/before2.webp",   // ✅ change to your image
-    headline: <>Glow Like Never <span style={{ color: '#1a1a1a' }}>Before With Us</span></>,
+    headline: <>Glow Like Never <span style={{ color: '#ffffff', backgroundColor: '#f472b6',paddingLeft: '10px', paddingRight: '10px' }}>Before With Us</span></>,
     sub: "Premium skincare treatments tailored just for you",
   },
   {
     url: "/banner3.jpg",
     rightImage: "/before3.webp",   // ✅ change to your image
-    headline: <>Your Beauty Journey <span style={{ color: '#1a1a1a' }}>Starts Here</span></>,
+    headline: <>Your Beauty Journey <span style={{ color: '#ffffff', backgroundColor: '#f472b6',paddingLeft: '10px', paddingRight: '10px' }}>Starts Here</span></>,
     sub: "Step in and experience the difference expert care makes",
   },
 ]

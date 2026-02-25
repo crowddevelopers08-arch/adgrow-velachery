@@ -59,7 +59,7 @@ const services: Service[] = [
     accent: "#b01545",
     bgTint: "#fff5f7",
     items: [
-      { label: "Botox & Fillers", desc: "Smooth out fine lines and restore youthful volume effortlessly." },
+      { label: "Fillers", desc: "Smooth out fine lines and restore youthful volume effortlessly." },
       { label: "RF Skin Tightening", desc: "Firm and lift sagging skin for a toned, defined appearance." },
       { label: "Collagen Boosters", desc: "Stimulate natural collagen for plump, youthful skin." },
     ],

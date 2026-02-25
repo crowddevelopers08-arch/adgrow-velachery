@@ -3,6 +3,7 @@ import ContactSection from "@/components/footer";
 import GrohairTopBar from "@/components/header";
 import VelacheryBeautyBanner from "@/components/hero-section";
 import GloskinApartSection from "@/components/logoslider";
+import MobileActionBar from "@/components/mobile-bar";
 import AppointmentForm from "@/components/offer-highlight";
 import WhoWeAreSection from "@/components/results-section";
 import CTABanner from "@/components/review";
@@ -22,7 +23,7 @@ export default function HomePage() {
       <CTABanner />
       <FAQSection />
       <ContactSection />
-
+      <MobileActionBar />
 
     </main>
   );
