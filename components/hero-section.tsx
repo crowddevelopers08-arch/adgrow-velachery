@@ -10,17 +10,17 @@ interface Slide {
 
 const slides: Slide[] = [
   {
-    url: "/home-slider-3.jpg",
+    url: "/banner2.jpg",
     headline: <>Discover <span style={{ color: '#1a1a1a' }}>Velachery's Secret</span> To Beautiful Skin</>,
     sub: "Achieve your desired look with our Expert Beauty Solutions",
   },
   {
-    url: "/slide4.jpg",
+    url: "/banners.jpg",
     headline: <>Glow Like Never <span style={{ color: '#1a1a1a' }}>Before With Us</span></>,
     sub: "Premium skincare treatments tailored just for you",
   },
   {
-    url: "/hero.png",
+    url: "/banner3.jpg",
     headline: <>Your Beauty Journey <span style={{ color: '#1a1a1a' }}>Starts Here</span></>,
     sub: "Step in and experience the difference expert care makes",
   },
