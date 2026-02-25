@@ -10,8 +10,6 @@ export default function PrivacyPolicyPage() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,500&family=Outfit:wght@300;400;500;600&display=swap');
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
         .pp-page {
           font-family: 'Outfit', sans-serif;
           background: #fff;
@@ -51,7 +49,7 @@ export default function PrivacyPolicyPage() {
         .pp-back {
           position: absolute;
           top: clamp(16px, 3vw, 24px);
-          left: clamp(16px, 4vw, 36px);
+          left: clamp(16px, 8vw, 106px);
           z-index: 10;
           display: inline-flex;
           align-items: center;
@@ -128,7 +126,7 @@ export default function PrivacyPolicyPage() {
           max-width: 880px;
           width: 100%;
           margin: 0 auto;
-          padding: clamp(48px, 8vw, 80px) clamp(20px, 5vw, 48px) clamp(60px, 10vw, 96px);
+          padding: clamp(30px, 8vw, 80px) clamp(20px, 5vw, 48px) clamp(30px, 10vw, 96px);
         }
 
         /* Intro */
@@ -136,7 +134,7 @@ export default function PrivacyPolicyPage() {
           font-size: clamp(0.9rem, 2.2vw, 1rem);
           color: #5a2a3c;
           line-height: 1.85; font-weight: 400;
-          margin-bottom: clamp(40px, 7vw, 60px);
+          margin-bottom: clamp(20px, 4vw, 60px);
           padding: clamp(18px, 3vw, 26px) clamp(18px, 4vw, 30px);
           background: #fdf0f4;
           border-left: 3px solid #c0174b;
@@ -145,8 +143,8 @@ export default function PrivacyPolicyPage() {
 
         /* Section */
         .pp-section {
-          margin-bottom: clamp(32px, 5vw, 48px);
-          padding-bottom: clamp(32px, 5vw, 48px);
+          margin-bottom: clamp(10px, 4vw, 48px);
+          padding-bottom: clamp(10px, 4vw, 48px);
           border-bottom: 1px solid #f5e4ea;
         }
         .pp-section:last-of-type { border-bottom: none; margin-bottom: 0; }
@@ -195,7 +193,7 @@ export default function PrivacyPolicyPage() {
           background: linear-gradient(135deg, #c0174b 0%, #8f0f36 100%);
           border-radius: clamp(12px, 3vw, 18px);
           padding: clamp(28px, 5vw, 40px) clamp(24px, 5vw, 44px);
-          margin-top: clamp(48px, 8vw, 64px);
+          margin-top: clamp(30px, 8vw, 64px);
         }
         .pp-contact-label {
           font-size: 0.65rem; font-weight: 700;

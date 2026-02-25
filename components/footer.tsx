@@ -406,8 +406,21 @@ export default function ContactSection() {
 
         </div>
 
-        <div className="ct-foot">© 2024 Advanced Gloskin. All rights reserved.</div>
+              <footer className="relative bg-[#e8185a] text-white text-sm py-4 max-sm:mb-10">
+      <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p className="text-center sm:text-left">
+          © {new Date().getFullYear()} Advanced Gloskin. All rights reserved | Powered By Crowd
+          Developers
+        </p>
 
+        <a
+          href="/privacy-policy"
+          className="text-white hover:text-black  transition-colors text-sm"
+        >
+          Privacy Policy
+        </a>
+      </div>
+    </footer>
       </section>
     </>
   );

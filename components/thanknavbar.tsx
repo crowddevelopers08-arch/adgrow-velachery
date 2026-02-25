@@ -19,9 +19,6 @@ export default function ThankYouPage() {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Outfit:wght@300;400;500;600;700&display=swap');
-
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
         .ty-page {
           font-family: 'Outfit', sans-serif;
           min-height: 100vh;

@@ -1,5 +1,5 @@
-import GrohairTopBar from '@/components/header'
 import PrivacyPolicyPage from '@/components/privacy'
+import GrohairTopBar from '@/components/thaksnavbar'
 import React from 'react'
 
 const page = () => {
