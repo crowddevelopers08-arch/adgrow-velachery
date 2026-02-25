@@ -6,19 +6,19 @@ import { useState, useEffect, useRef } from "react";
 const faqs = [
   {
     q: "What are the common skin concerns that can be treated?",
-    a: "We treat acne, pigmentation, dark spots, uneven skin tone, fine lines, enlarged pores, dryness, and sensitive skin conditions — tailored to your unique skin profile.",
+    a: "Our skin treatments address a wide range of concerns, including acne, wrinkles, sun damage, hyperpigmentation, and uneven skin tone. Whether you’re looking to improve the appearance of fine lines or reduce blemishes, we have treatments tailored to your specific needs.",
   },
   {
     q: "How long does it take to see results from skin treatments?",
-    a: "Many clients notice visible improvements within 2–4 weeks. Advanced treatments like laser therapy may show optimal results after 6–8 weeks with continued improvement.",
+    a: "The timeline for visible results can vary depending on the type of treatment and individual factors. In general, you may start noticing improvements after a few sessions, but optimal results are typically achieved after a series of treatments. Our experienced professionals will guide you through the process and provide realistic expectations based on your unique circumstances.",
   },
   {
     q: "Are the skin treatments safe for all skin types?",
-    a: "Yes. All treatments are carefully tailored for diverse skin types including sensitive, dry, oily, and combination skin, after a thorough skin analysis by our certified dermatologists.",
+    a: "Our skin treatments are designed to be safe and effective for various skin types. We offer customized solutions that can be tailored to accommodate sensitive, oily, dry, or combination skin. During your consultation, we will assess your skin and recommend the most suitable treatment options to achieve the desired outcomes while ensuring your safety.",
   },
   {
     q: "Is there any downtime associated with skin treatments?",
-    a: "Most treatments involve minimal to zero downtime. Some deeper procedures may require 24–72 hours of recovery, for which we provide complete aftercare guidance.",
+    a: "The amount of downtime can vary depending on the specific treatment you choose. While some treatments may have minimal to no downtime, others might involve temporary redness, mild peeling, or slight swelling. Our knowledgeable staff will provide you with post-treatment instructions and recommendations to help you recover comfortably and quickly.",
   },
 ];
 
@@ -172,6 +172,7 @@ export default function FAQSection() {
         @media(max-width:480px) {
           .faq { padding:36px 18px; }
           .faq-title { font-size:1.9rem; }
+          .faq-heading { margin-bottom:30px; }
           .faq-q-num { display:none; }
           .faq-q { padding:20px 0; gap:12px; }
         }

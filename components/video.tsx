@@ -103,20 +103,32 @@ const ImageGridCarousel = () => {
 
   return (
     <>
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+   <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,500&family=Outfit:wght@300;400;500;600&display=swap');
+
+        .cvg-section {
+          font-family: 'Outfit', sans-serif;
+        }
+
+        .cvg-heading {
+          font-family: 'Playfair Display', serif;
+          font-weight: 800;
+        }
+
+        .cvg-subtext {
+          font-family: 'Playfair Display', serif;
+        }
       `}</style>
       <section 
-        className="w-full px-4 sm:px-5 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10 lg:py-12"
-        style={{fontFamily: "'Outfit', sans-serif"}}
+        className="cvg-section w-full px-4 sm:px-5 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10 lg:py-12"
       >
-        <div className="max-w-7xl mx-auto" style={{fontFamily: "'Outfit', sans-serif"}}>
+        <div className="max-w-7xl mx-auto">
           {/* Title */}
-          <div className="text-center mb-6 sm:mb-8 md:mb-10">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#ec4899] mb-2 sm:mb-3">
-              Real People, Real Results.
+          <div className="cvg-heading text-center mb-6 sm:mb-8 md:mb-10">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3">
+              Real People, <span className="text-[#ec4899]">Real Results.</span>
             </h2>
-            <p className="text-gray-600 text-sm sm:text-base md:text-lg max-w-3xl mx-auto">
+            <p className="cvg-subtext text-sm sm:text-base md:text-lg text-gray-600 max-w-3xl mx-auto px-4">
               Witness the transformation with our proven hair treatments
             </p>
           </div>

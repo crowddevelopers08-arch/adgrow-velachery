@@ -9,6 +9,7 @@ import WhoWeAreSection from "@/components/results-section";
 import CTABanner from "@/components/review";
 import BeautyServicesSection from "@/components/skinpopup";
 import ImageGridCarousel from "@/components/video";
+import ClinicVideosResponsiveGrid from "@/components/videosection";
 
 
 export default function HomePage() {
@@ -18,6 +19,7 @@ export default function HomePage() {
       <VelacheryBeautyBanner />
       <BeautyServicesSection />
       <ImageGridCarousel />
+      {/* <ClinicVideosResponsiveGrid /> */}
       <WhoWeAreSection />
       <GloskinApartSection />
       <CTABanner />
