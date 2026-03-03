@@ -1,37 +1,11 @@
-import { PrismaClient, LeadStatus } from "@prisma/client";
-
-const prismaClientSingleton = () =>
-  new PrismaClient({
-    log: ["error"],
-    errorFormat: "minimal",
-  });
-
-type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>;
+import { PrismaClient } from '@prisma/client'
 
 const globalForPrisma = globalThis as unknown as {
-  prisma?: PrismaClientSingleton;
-};
-
-export const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
+  prisma: PrismaClient | undefined
 }
 
-export const db = {
-  lead: {
-    create: (data: any) => prisma.lead.create({ data }),
+export const prisma = globalForPrisma.prisma ?? new PrismaClient()
 
-    findMany: () =>
-      prisma.lead.findMany({ orderBy: { createdAt: "desc" } }),
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
-    findById: (id: string) =>
-      prisma.lead.findUnique({ where: { id } }),
-
-    update: (id: string, data: any) =>
-      prisma.lead.update({ where: { id }, data }),
-
-    delete: (id: string) =>
-      prisma.lead.delete({ where: { id } }),
-  },
-};
+export const db = prisma

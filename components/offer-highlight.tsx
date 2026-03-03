@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function AppointmentForm() {
@@ -15,6 +15,22 @@ export default function AppointmentForm() {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  
+  // Capture page context on component mount
+  const [pageContext, setPageContext] = useState({
+    url: '',
+    title: '',
+    referrer: '',
+  });
+
+  useEffect(() => {
+    // Capture the current page URL and title
+    setPageContext({
+      url: window.location.href,
+      title: document.title,
+      referrer: document.referrer || '',
+    });
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -33,7 +49,14 @@ export default function AppointmentForm() {
     setLoading(true);
     setMessage(null);
 
-    // Validate pincode
+    // Validate phone number
+    if (!/^[6-9]\d{9}$/.test(formData.phone)) {
+      setMessage({ type: 'error', text: 'Please enter a valid 10-digit Indian phone number' });
+      setLoading(false);
+      return;
+    }
+
+    // Validate pincode (optional but must be 6 digits if provided)
     if (formData.pincode && !/^\d{6}$/.test(formData.pincode)) {
       setMessage({ type: 'error', text: 'Please enter a valid 6-digit pincode' });
       setLoading(false);
@@ -41,24 +64,45 @@ export default function AppointmentForm() {
     }
 
     try {
-      const response = await fetch("/api/contact-form", {
+      // Prepare the payload with page context
+      const payload = {
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        treatment: formData.treatment,
+        concern: formData.treatment, // Map to concern field
+        pincode: formData.pincode,
+        source: "appointment-form",
+        formName: "Website Leads", // This will identify the form in the dashboard
+        
+        // Page context
+        pageUrl: pageContext.url,
+        pageTitle: pageContext.title,
+        referrer: pageContext.referrer,
+        
+        // Browser info
+        userAgent: navigator.userAgent,
+        
+        // Parse UTM parameters from URL
+        utmSource: new URLSearchParams(window.location.search).get('utm_source'),
+        utmMedium: new URLSearchParams(window.location.search).get('utm_medium'),
+        utmCampaign: new URLSearchParams(window.location.search).get('utm_campaign'),
+        utmTerm: new URLSearchParams(window.location.search).get('utm_term'),
+        utmContent: new URLSearchParams(window.location.search).get('utm_content'),
+      };
+
+      console.log("Submitting to /api/leads:", payload); // Debug log
+
+      const response = await fetch("/api/leads", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          name: formData.name,
-          phone: formData.phone,
-          email: formData.email,
-          treatment: formData.treatment,
-          concern: formData.treatment,
-          city: formData.pincode,
-          source: "appointment-form",
-          formName: "Appointment Form",
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
+      console.log("Response from server:", data); // Debug log
 
       if (response.ok && data.success) {
         // Store form data for thank you page if needed
@@ -68,15 +112,19 @@ export default function AppointmentForm() {
           email: formData.email,
           treatment: formData.treatment,
           timestamp: new Date().toISOString(),
+          pageUrl: pageContext.url,
         };
         
         // Store in sessionStorage for the thank you page
         sessionStorage.setItem('appointmentDetails', JSON.stringify(formDetails));
         
-        // Redirect to thank you page
-        router.push("/thank-you");
+        // Show success message before redirect
+        setMessage({ 
+          type: 'success', 
+          text: 'Appointment booked successfully! Redirecting...' 
+        });
         
-        // Reset form (optional, since we're redirecting)
+        // Reset form
         setFormData({
           name: "",
           phone: "",
@@ -84,13 +132,19 @@ export default function AppointmentForm() {
           treatment: "",
           pincode: "",
         });
+        
+        // Redirect to thank you page after a short delay
+        setTimeout(() => {
+          router.push("/thank-you");
+        }, 1500);
       } else {
         setMessage({ 
           type: 'error', 
-          text: data.error || 'Failed to book appointment. Please try again.' 
+          text: data.error || data.details || 'Failed to book appointment. Please try again.' 
         });
       }
     } catch (error) {
+      console.error("Form submission error:", error);
       setMessage({ 
         type: 'error', 
         text: 'Network error. Please check your connection and try again.' 
@@ -178,6 +232,7 @@ export default function AppointmentForm() {
               <option value="Alopecia & Patchy Hair Loss">Alopecia & Patchy Hair Loss</option>
               <option value="Receding Hairline Solutions">Receding Hairline Solutions</option>
               <option value="Genetic Hair Loss Treatment">Genetic Hair Loss Treatment</option>
+              <option value="Laser Hair Reduction">Laser Hair Reduction</option>
             </select>
 
             <input

@@ -1,801 +1,739 @@
-"use client";
+"use client"
 
-import { useState, useEffect, Fragment } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import {
-  Search,
-  Filter,
-  Download,
-  Phone,
-  Mail,
-  Calendar,
-  RefreshCw,
-  Users,
-  ChevronDown,
-  ChevronUp,
-  MessageSquare,
-  MapPin,
-  User,
-  Clock,
-  MoreVertical,
-} from "lucide-react";
+import { useState, useEffect, Fragment } from "react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
+import { Search, Filter, Download, Phone, Mail, Calendar, RefreshCw, Users, FileText, ChevronDown, ChevronUp, Globe, MapPin } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-/* ---------- Types ---------- */
-type UIStatus = "new" | "contacted" | "scheduled" | "converted" | "lost";
+} from "@/components/ui/dropdown-menu"
 
 interface Lead {
-  id: string;
-  name: string;
-  phone: string;
-  email: string;
-  treatment?: string;
-  procedure?: string;
-  message?: string;
-  city?: string;
-  age?: string;
-  consent: boolean;
-  source?: string;
-  formName?: string;
-  status: string;
-  telecrmSynced: boolean;
-  telecrmId?: string;
-  hairLossStage?: string;
-  createdAt: string;
-  updatedAt: string;
+  id: string
+  name: string
+  phone: string
+  email: string
+  treatment: string
+  procedure: string
+  concern: string
+  message: string
+  city: string
+  age: string
+  pincode: string
+  consent: boolean
+  source: string
+  formName: string
+  status: 'new' | 'contacted' | 'scheduled' | 'converted' | 'lost'
+  telecrmSynced: boolean
+  telecrmId?: string
+  pageUrl?: string
+  pageTitle?: string
+  referrer?: string
+  utmSource?: string
+  utmMedium?: string
+  utmCampaign?: string
+  utmTerm?: string
+  utmContent?: string
+  createdAt: string
+  updatedAt: string
 }
 
-/* ---------- Helpers ---------- */
-const dbToUIStatus = (v?: string): UIStatus =>
-  (v?.toLowerCase() as UIStatus) ?? "new";
+interface LeadsTableProps {
+  initialLeads?: Lead[]
+  autoRefresh?: boolean
+  refreshInterval?: number
+}
 
-const uiToDbStatus = (v: UIStatus) => v.toUpperCase();
-
-const safe = (v?: string) => (v ? v.toLowerCase() : "");
-
-/* ---------- Component ---------- */
-export default function LeadsTable({
-  initialLeads = [],
+export default function LeadsTable({ 
+  initialLeads = [], 
   autoRefresh = false,
-  refreshInterval = 30000,
-  showAppointmentForm = true,
-}: {
-  initialLeads?: Lead[];
-  autoRefresh?: boolean;
-  refreshInterval?: number;
-  showAppointmentForm?: boolean;
-}) {
-  const [leads, setLeads] = useState<Lead[]>(initialLeads);
-  const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [treatmentFilter, setTreatmentFilter] = useState("all");
-  const [dateFilter, setDateFilter] = useState("all");
-  const [formFilter, setFormFilter] = useState("all");
-  const [expandedLead, setExpandedLead] = useState<string | null>(null);
-  const [isClient, setIsClient] = useState(false);
-  const [showForm, setShowForm] = useState(showAppointmentForm);
-  const [sortConfig, setSortConfig] = useState<{
-    key: keyof Lead;
-    direction: "asc" | "desc";
-  } | null>(null);
+  refreshInterval = 30000 
+}: LeadsTableProps) {
+  const [leads, setLeads] = useState<Lead[]>(initialLeads)
+  const [loading, setLoading] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [statusFilter, setStatusFilter] = useState<string>("all")
+  const [treatmentFilter, setTreatmentFilter] = useState<string>("all")
+  const [dateFilter, setDateFilter] = useState<string>("all")
+  const [formFilter, setFormFilter] = useState<string>("all")
+  const [expandedLead, setExpandedLead] = useState<string | null>(null)
+  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null)
+  const [isClient, setIsClient] = useState(false)
 
-  useEffect(() => setIsClient(true), []);
+  // Set client-side flag to avoid hydration issues
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
-  /* ---------- Fetch Leads ---------- */
+  // Fetch leads from API
   const fetchLeads = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const res = await fetch("/api/contact-form");
-      const data = await res.json();
-      setLeads(res.ok && data.success ? data.leads || [] : []);
-    } catch {
-      setLeads([]);
+      const response = await fetch('/api/leads')
+      const data = await response.json()
+      
+      if (response.ok) {
+        setLeads(data.leads || [])
+      } else {
+        console.error('Failed to fetch leads:', data.error)
+      }
+    } catch (error) {
+      console.error('Error fetching leads:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
+  // Load leads on component mount
   useEffect(() => {
-    fetchLeads();
-  }, []);
+    fetchLeads()
+  }, [])
 
+  // Auto-refresh functionality
   useEffect(() => {
-    if (!autoRefresh) return;
-    const interval = setInterval(fetchLeads, refreshInterval);
-    return () => clearInterval(interval);
-  }, [autoRefresh, refreshInterval]);
+    if (!autoRefresh) return
 
-  /* ---------- Sorting ---------- */
-  const handleSort = (key: keyof Lead) => {
-    setSortConfig((prev) => ({
-      key,
-      direction: prev?.key === key && prev.direction === "asc" ? "desc" : "asc",
-    }));
-  };
+    const interval = setInterval(fetchLeads, refreshInterval)
+    return () => clearInterval(interval)
+  }, [autoRefresh, refreshInterval])
 
+  // Sort leads
   const sortedLeads = [...leads].sort((a, b) => {
-    if (!sortConfig) return 0;
-    let aVal = a[sortConfig.key];
-    let bVal = b[sortConfig.key];
-    if (sortConfig.key === "createdAt" || sortConfig.key === "updatedAt") {
-      aVal = new Date(aVal as string).getTime();
-      bVal = new Date(bVal as string).getTime();
-    } else {
-      aVal = (aVal ?? "").toString().toLowerCase();
-      bVal = (bVal ?? "").toString().toLowerCase();
+    if (!sortConfig) return 0
+    
+    const { key, direction } = sortConfig
+    let aValue = a[key as keyof Lead]
+    let bValue = b[key as keyof Lead]
+    let aCompare: string | number = aValue as string
+    let bCompare: string | number = bValue as string
+    
+    if (key === 'createdAt' || key === 'updatedAt') {
+      aCompare = new Date(aValue as string).getTime()
+      bCompare = new Date(bValue as string).getTime()
+    } else if (typeof aValue === 'string') {
+      aCompare = aValue.toLowerCase()
+      bCompare = (bValue as string).toLowerCase()
     }
-    if (aVal < bVal) return sortConfig.direction === "asc" ? -1 : 1;
-    if (aVal > bVal) return sortConfig.direction === "asc" ? 1 : -1;
-    return 0;
-  });
+    
+    if (aCompare < bCompare) return direction === 'asc' ? -1 : 1
+    if (aCompare > bCompare) return direction === 'asc' ? 1 : -1
+    return 0
+  })
 
-  /* ---------- Filters ---------- */
-  const isWithinDateRange = (date: string, range: string) => {
-    const d = new Date(date);
-    const now = new Date();
-    if (range === "today") return d.toDateString() === now.toDateString();
-    if (range === "week") {
-      const w = new Date(now);
-      w.setDate(now.getDate() - 7);
-      return d >= w;
+  // Safe string conversion for filtering
+  const safeString = (value: any): string => {
+    if (value === null || value === undefined) return ''
+    return String(value).toLowerCase()
+  }
+
+  // Filter leads based on search and filters
+  const filteredLeads = sortedLeads.filter((lead) => {
+    const matchesSearch = 
+      safeString(lead.name).includes(safeString(searchTerm)) ||
+      safeString(lead.phone).includes(safeString(searchTerm)) ||
+      safeString(lead.email).includes(safeString(searchTerm)) ||
+      safeString(lead.treatment).includes(safeString(searchTerm)) ||
+      safeString(lead.concern).includes(safeString(searchTerm)) ||
+      safeString(lead.message).includes(safeString(searchTerm)) ||
+      safeString(lead.city).includes(safeString(searchTerm)) ||
+      safeString(lead.pincode).includes(safeString(searchTerm)) ||
+      safeString(lead.formName).includes(safeString(searchTerm))
+    
+    const matchesStatus = statusFilter === "all" || lead.status === statusFilter
+    const matchesTreatment = treatmentFilter === "all" || 
+      lead.treatment === treatmentFilter || 
+      lead.concern === treatmentFilter
+    const matchesDate = dateFilter === "all" || isWithinDateRange(lead.createdAt, dateFilter)
+    const matchesForm = formFilter === "all" || lead.formName === formFilter
+    
+    return matchesSearch && matchesStatus && matchesTreatment && matchesDate && matchesForm
+  })
+
+  function isWithinDateRange(date: string, range: string): boolean {
+    if (!date) return false
+    
+    const leadDate = new Date(date)
+    const now = new Date()
+    
+    switch (range) {
+      case "today":
+        return leadDate.toDateString() === now.toDateString()
+      case "week":
+        const weekAgo = new Date(now)
+        weekAgo.setDate(weekAgo.getDate() - 7)
+        return leadDate >= weekAgo
+      case "month":
+        const monthAgo = new Date(now)
+        monthAgo.setMonth(monthAgo.getMonth() - 1)
+        return leadDate >= monthAgo
+      default:
+        return true
     }
-    if (range === "month") {
-      const m = new Date(now);
-      m.setMonth(now.getMonth() - 1);
-      return d >= m;
+  }
+
+  const getStatusBadge = (status: Lead['status']) => {
+    const statusConfig = {
+      new: { label: "New", color: "bg-blue-100 text-blue-800 border-blue-200" },
+      contacted: { label: "Contacted", color: "bg-yellow-100 text-yellow-800 border-yellow-200" },
+      scheduled: { label: "Scheduled", color: "bg-purple-100 text-purple-800 border-purple-200" },
+      converted: { label: "Converted", color: "bg-green-100 text-green-800 border-green-200" },
+      lost: { label: "Lost", color: "bg-red-100 text-red-800 border-red-200" }
     }
-    return true;
-  };
+    
+    const config = statusConfig[status]
+    // return <Badge variant="outline" className={`${config.color} border`}>{config.label}</Badge>
+  }
 
-  const filteredLeads = sortedLeads.filter((l) => {
-    const uiStatus = dbToUIStatus(l.status);
-    const matchesSearch =
-      safe(l.name).includes(safe(searchTerm)) ||
-      safe(l.phone).includes(safe(searchTerm)) ||
-      safe(l.email).includes(safe(searchTerm)) ||
-      safe(l.treatment).includes(safe(searchTerm)) ||
-      safe(l.message).includes(safe(searchTerm)) ||
-      safe(l.city).includes(safe(searchTerm)) ||
-      safe(l.formName).includes(safe(searchTerm)) ||
-      safe(l.hairLossStage).includes(safe(searchTerm));
-    const matchesStatus = statusFilter === "all" || uiStatus === statusFilter;
-    const matchesTreatment =
-      treatmentFilter === "all" || l.treatment === treatmentFilter;
-    const matchesDate =
-      dateFilter === "all" || isWithinDateRange(l.createdAt, dateFilter);
-    const matchesForm = formFilter === "all" || l.formName === formFilter;
-    return (
-      matchesSearch && matchesStatus && matchesTreatment && matchesDate && matchesForm
-    );
-  });
+  const getFormBadge = (formName: string) => {
+    if (!formName) {
+      return <Badge variant="outline" className="bg-gray-100 text-gray-800 border-gray-200 text-xs">Unknown</Badge>
+    }
+    
+    const formConfig: { [key: string]: { label: string, color: string } } = {
+      'hairtreatment': { label: "Hair Treatment", color: "bg-purple-100 text-purple-800 border-purple-200" },
+      'skin and hair leads': { label: "Skin & Hair", color: "bg-indigo-100 text-indigo-800 border-indigo-200" },
+      'southernspine': { label: "Southern Spine", color: "bg-blue-100 text-blue-800 border-blue-200" },
+      'website leads': { label: "Website Leads", color: "bg-green-100 text-green-800 border-green-200" },
+      'appointment form': { label: "Appointment Form", color: "bg-orange-100 text-orange-800 border-orange-200" },
+      'default': { label: formName, color: "bg-gray-100 text-gray-800 border-gray-200" }
+    }
+    
+    const config = formConfig[formName.toLowerCase()] || formConfig.default
+    return <Badge variant="outline" className={`${config.color} border text-xs`}>{config.label}</Badge>
+  }
 
-  /* ---------- UI Helpers ---------- */
-  const getStatusBadge = (status: UIStatus) => {
-    const map = {
-      new: "bg-blue-100 text-blue-800 border-blue-200",
-      contacted: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      scheduled: "bg-purple-100 text-purple-800 border-purple-200",
-      converted: "bg-green-100 text-green-800 border-green-200",
-      lost: "bg-red-100 text-red-800 border-red-200",
-    } as const;
-    return (
-      <Badge variant="outline" className={`${map[status]} border`}>
-        {status.charAt(0).toUpperCase() + status.slice(1)}
-      </Badge>
-    );
-  };
+  const getTelecrmBadge = (synced: boolean) => {
+    return synced ? 
+      <Badge className="bg-green-100 text-green-800 border-green-200">Synced</Badge> :
+      <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-200">Pending</Badge>
+  }
 
-  const getFormBadge = (name?: string) => {
-    if (!name)
-      return (
-        <Badge className="bg-gray-100 text-gray-700 border-gray-200">
-          Unknown
-        </Badge>
-      );
-    const n = name.toLowerCase();
-    const map: Record<string, { label: string; color: string }> = {
-      "contact-form": {
-        label: "Contact Form",
-        color: "bg-blue-100 text-blue-800 border-blue-200",
-      },
-      "common-form": {
-        label: "Common Form",
-        color: "bg-emerald-100 text-emerald-800 border-emerald-200",
-      },
-      hairtreatment: {
-        label: "Hair Treatment",
-        color: "bg-purple-100 text-purple-800 border-purple-200",
-      },
-      "skin and hair leads": {
-        label: "Skin & Hair",
-        color: "bg-indigo-100 text-indigo-800 border-indigo-200",
-      },
-      "appointment-form": {
-        label: "Appointment Form",
-        color: "bg-red-100 text-red-800 border-red-200",
-      },
-    };
-    const cfg = map[n] || {
-      label: name,
-      color: "bg-gray-100 text-gray-800 border-gray-200",
-    };
-    return (
-      <Badge variant="outline" className={`${cfg.color} border text-xs`}>
-        {cfg.label}
-      </Badge>
-    );
-  };
+  // Get unique form names for filter
+  const uniqueFormNames = Array.from(new Set(leads.map(lead => lead.formName).filter(Boolean)))
 
-  const getTelecrmBadge = (v: boolean) =>
-    v ? (
-      <Badge className="bg-green-100 text-green-800 border-green-200">
-        Synced
-      </Badge>
-    ) : (
-      <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
-        Pending
-      </Badge>
-    );
+  // Get statistics
+  const getFormStats = () => {
+    const stats: { [key: string]: { total: number, new: number, converted: number, synced: number } } = {}
+    
+    leads.forEach(lead => {
+      const formName = lead.formName || 'Unknown'
+      if (!stats[formName]) {
+        stats[formName] = { total: 0, new: 0, converted: 0, synced: 0 }
+      }
+      
+      stats[formName].total++
+      if (lead.status === 'new') stats[formName].new++
+      if (lead.status === 'converted') stats[formName].converted++
+      if (lead.telecrmSynced) stats[formName].synced++
+    })
+    
+    return stats
+  }
 
-  const updateLeadStatus = async (id: string, status: UIStatus) => {
+  const formStats = getFormStats()
+
+  const exportToCSV = () => {
+    const headers = ["Name", "Phone", "Email", "Treatment/Concern", "Message", "City", "Pincode", "Age", "Status", "Form Name", "Source", "TeleCRM Synced", "Page URL", "UTM Source", "UTM Campaign", "Created At"]
+    const csvData = filteredLeads.map(lead => [
+      lead.name || '',
+      lead.phone || '',
+      lead.email || '',
+      lead.treatment || lead.concern || '',
+      `"${(lead.message || '').replace(/"/g, '""')}"`,
+      lead.city || '',
+      lead.pincode || '',
+      lead.age || '',
+      lead.status || '',
+      lead.formName || '',
+      lead.source || '',
+      lead.telecrmSynced ? "Yes" : "No",
+      lead.pageUrl || '',
+      lead.utmSource || '',
+      lead.utmCampaign || '',
+      isClient ? new Date(lead.createdAt).toLocaleString('en-IN') : lead.createdAt
+    ])
+    
+    const csvContent = [headers, ...csvData]
+      .map(row => row.join(","))
+      .join("\n")
+    
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `leads-${new Date().toISOString().split('T')[0]}.csv`
+    a.click()
+    window.URL.revokeObjectURL(url)
+  }
+
+  const handleCall = (phone: string) => {
+    if (phone) {
+      window.open(`tel:${phone}`, '_self')
+    }
+  }
+
+  const handleEmail = (email: string) => {
+    if (email) {
+      window.open(`mailto:${email}`, '_self')
+    }
+  }
+
+  const handleSort = (key: string) => {
+    setSortConfig(current => ({
+      key,
+      direction: current?.key === key && current.direction === 'asc' ? 'desc' : 'asc'
+    }))
+  }
+
+  const toggleLeadExpansion = (leadId: string) => {
+    setExpandedLead(current => current === leadId ? null : leadId)
+  }
+
+  const updateLeadStatus = async (leadId: string, newStatus: Lead['status']) => {
     try {
-      const res = await fetch(`/api/leads/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
-      });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setLeads((prev) =>
-          prev.map((l) =>
-            l.id === id ? { ...l, status: uiToDbStatus(status) } : l
-          )
-        );
+      const response = await fetch(`/api/leads/${leadId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      })
+      
+      if (response.ok) {
+        setLeads(leads.map(lead => 
+          lead.id === leadId ? { ...lead, status: newStatus } : lead
+        ))
+      }
+    } catch (error) {
+      console.error('Error updating lead status:', error)
+    }
+  }
+
+  // Format date safely for client-side rendering
+  const formatDate = (dateString: string) => {
+    if (!isClient || !dateString) return { date: '', time: '' }
+    
+    try {
+      const date = new Date(dateString)
+      return {
+        date: date.toLocaleDateString('en-IN'),
+        time: date.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })
       }
     } catch {
-      /* no-op */
+      return { date: 'Invalid Date', time: '' }
     }
-  };
+  }
 
-  const formatDate = (d: string) => {
-    if (!isClient || !d) return { date: "", time: "" };
-    const dt = new Date(d);
-    return {
-      date: dt.toLocaleDateString("en-IN"),
-      time: dt.toLocaleTimeString("en-IN", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
-  };
-
-  const toggleLeadExpansion = (id: string) =>
-    setExpandedLead((c) => (c === id ? null : id));
-
-  /* ---------- CSV Export ---------- */
-  const exportToCSV = () => {
-    const headers = [
-      "Name","Phone","Email","Treatment","Hair Loss Stage","Message",
-      "City","Age","Status","Form Name","Source","TeleCRM Synced","Created At",
-    ];
-    const rows = filteredLeads.map((l) => [
-      l.name ?? "",
-      l.phone ?? "",
-      l.email ?? "",
-      l.treatment ?? "",
-      l.hairLossStage ?? "",
-      `"${(l.message ?? "").replace(/"/g, '""')}"`,
-      l.city ?? "",
-      l.age ?? "",
-      dbToUIStatus(l.status),
-      l.formName ?? "",
-      l.source ?? "",
-      l.telecrmSynced ? "Yes" : "No",
-      isClient ? new Date(l.createdAt).toLocaleString("en-IN") : l.createdAt,
-    ]);
-    const csv = [headers, ...rows].map((r) => r.join(",")).join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `leads-${new Date().toISOString().split("T")[0]}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const handleCall = (p?: string) => p && window.open(`tel:${p}`, "_self");
-  const handleEmail = (e?: string) => e && window.open(`mailto:${e}`, "_self");
-  const uniqueFormNames = Array.from(
-    new Set(leads.map((l) => l.formName).filter(Boolean))
-  );
-
-  /* ---------- Responsive UI ---------- */
   return (
-    <div className="min-h-screen bg-gray-50 p-2 sm:p-3 md:p-4 lg:p-6">
-      <Card className="border-0 sm:border shadow-none sm:shadow-sm">
-        <CardHeader className="px-3 py-4 sm:px-6 sm:py-6">
-          <div className="flex flex-col gap-4 sm:gap-6">
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div>
-                  <CardTitle className="text-xl sm:text-2xl lg:text-3xl font-bold">
-                    Leads Management
-                  </CardTitle>
-                  <CardDescription className="text-sm sm:text-base">
-                    Manage and track consultation requests
-                  </CardDescription>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={fetchLeads}
-                    disabled={loading}
-                    size="sm"
-                    className="flex-1 sm:flex-none"
-                  >
-                    <RefreshCw
-                      className={`h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2 ${
-                        loading ? "animate-spin" : ""
-                      }`}
-                    />
-                    <span className="hidden xs:inline">
-                      {loading ? "Refreshing..." : "Refresh"}
-                    </span>
-                    <span className="xs:hidden">Refresh</span>
-                  </Button>
-                  <Button
-                    onClick={exportToCSV}
-                    size="sm"
-                    className="flex-1 sm:flex-none"
-                  >
-                    <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
-                    <span className="hidden xs:inline">Export CSV</span>
-                    <span className="xs:hidden">Export</span>
-                  </Button>
-                </div>
-              </div>
+    <div className="min-h-screen bg-gray-50 text-gray-900 p-4">
+      <Card className="w-full bg-white border-gray-200">
+        <CardHeader className="border-b border-gray-200">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <CardTitle className="text-2xl font-bold text-gray-900">Leads Management Dashboard</CardTitle>
+              <CardDescription className="text-gray-600">
+                Manage and track all consultation requests from your website forms
+                {autoRefresh && <span className="ml-2 text-xs text-green-600">• Auto-refresh enabled</span>}
+              </CardDescription>
             </div>
-
-            {/* Filter Section - Responsive */}
-            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-6 gap-3 p-3 sm:p-4 bg-gray-50/50 rounded-lg border">
-              <div className="relative lg:col-span-2">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-                <Input
-                  placeholder="Search name, phone, email..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 text-sm h-10"
-                />
-              </div>
-              <div>
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="h-10 text-sm">
-                    <div className="flex items-center">
-                      <Filter className="h-4 w-4 mr-2 flex-shrink-0" />
-                      <span className="truncate">Status</span>
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="new">New</SelectItem>
-                    {/* <SelectItem value="contacted">Contacted</SelectItem>
-                    <SelectItem value="scheduled">Scheduled</SelectItem>
-                    <SelectItem value="converted">Converted</SelectItem>
-                    <SelectItem value="lost">Lost</SelectItem> */}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Select value={treatmentFilter} onValueChange={setTreatmentFilter}>
-                  <SelectTrigger className="h-10 text-sm">
-                    <div className="flex items-center">
-                      <span className="truncate">Treatment</span>
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Treatments</SelectItem>
-                    <SelectItem value="Hair Transplant">Hair Transplant</SelectItem>
-                    <SelectItem value="Baldness Treatment">Baldness Treatment</SelectItem>
-                    <SelectItem value="Hair Thinning Treatment">Hair Thinning</SelectItem>
-                    <SelectItem value="Alopecia & Patchy Hair Loss">Alopecia</SelectItem>
-                    <SelectItem value="Receding Hairline Solutions">Receding Hairline</SelectItem>
-                    <SelectItem value="Genetic Hair Loss Treatment">Genetic Hair Loss</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Select value={formFilter} onValueChange={setFormFilter}>
-                  <SelectTrigger className="h-10 text-sm">
-                    <div className="flex items-center">
-                      <Users className="h-4 w-4 mr-2 flex-shrink-0" />
-                      <span className="truncate">Form</span>
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Forms</SelectItem>
-                    {uniqueFormNames.map((f) => (
-                      <SelectItem key={f} value={f!} className="truncate max-w-[200px]">
-                        {f}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="xs:col-span-2 lg:col-span-1">
-                <Select value={dateFilter} onValueChange={setDateFilter}>
-                  <SelectTrigger className="h-10 text-sm">
-                    <div className="flex items-center">
-                      <Calendar className="h-4 w-4 mr-2 flex-shrink-0" />
-                      <span className="truncate">Date</span>
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Time</SelectItem>
-                    <SelectItem value="today">Today</SelectItem>
-                    <SelectItem value="week">This Week</SelectItem>
-                    <SelectItem value="month">This Month</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                onClick={fetchLeads} 
+                disabled={loading}
+                className="flex items-center gap-2 border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                {loading ? 'Refreshing...' : 'Refresh'}
+              </Button>
+              <Button 
+                onClick={exportToCSV} 
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                <Download className="h-4 w-4" />
+                Export CSV
+              </Button>
             </div>
           </div>
         </CardHeader>
-
-        <CardContent className="px-3 sm:px-6 pb-6">
-          {/* Mobile Cards View */}
-          <div className="lg:hidden space-y-3">
-            {filteredLeads.map((lead) => {
-              const uiStatus = dbToUIStatus(lead.status);
-              const d = formatDate(lead.createdAt);
-              return (
-                <Card key={lead.id} className="overflow-hidden">
-                  <div
-                    className="p-4 cursor-pointer hover:bg-gray-50"
-                    onClick={() => toggleLeadExpansion(lead.id)}
-                  >
-                    <div className="flex justify-between items-start mb-3">
-                      <div>
-                        <h3 className="font-semibold text-lg truncate">
-                          {lead.name || "Unknown"}
-                        </h3>
-                        <div className="flex items-center gap-2 mt-1">
-                          {getStatusBadge(uiStatus)}
-                          <span className="text-xs text-gray-600">
-                            {d.date}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex gap-1">
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCall(lead.phone);
-                          }}
-                          className="h-8 w-8"
-                          disabled={!lead.phone}
-                        >
-                          <Phone className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEmail(lead.email);
-                          }}
-                          className="h-8 w-8"
-                          disabled={!lead.email}
-                        >
-                          <Mail className="h-4 w-4" />
-                        </Button>
-                      </div>
+        
+        <CardContent className="p-6">
+          {/* Form Statistics */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            {Object.entries(formStats).map(([formName, stats]) => (
+              <Card key={formName} className="p-4 bg-white border-gray-200 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <FileText className="h-4 w-4 text-blue-600" />
+                      <span className="font-medium text-sm text-gray-900 capitalize">
+                        {formName === 'hairtreatment' ? 'Hair Treatment' : 
+                         formName === 'skin and hair leads' ? 'Skin & Hair' : 
+                         formName === 'southernspine' ? 'Southern Spine' :
+                         formName === 'website leads' ? 'Website Leads' :
+                         formName === 'appointment form' ? 'Appointment Form' :
+                         formName === 'Unknown' ? 'Unknown Form' : formName}
+                      </span>
                     </div>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-gray-500" />
-                        <span className="truncate">{lead.phone || "-"}</span>
-                      </div>
-                      {lead.email && (
-                        <div className="flex items-center gap-2">
-                          <Mail className="h-4 w-4 text-gray-500" />
-                          <span className="truncate">{lead.email}</span>
-                        </div>
-                      )}
-                      {lead.treatment && (
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">Treatment:</span>
-                          <span>{lead.treatment}</span>
-                        </div>
-                      )}
-                      {lead.city && (
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4 text-gray-500" />
-                          <span>{lead.city}</span>
-                        </div>
-                      )}
+                    <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+                  </div>
+                  <div className="text-right text-xs space-y-1">
+                    <div className="flex items-center gap-1 justify-end">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-gray-600">New: {stats.new}</span>
+                    </div>
+                    <div className="flex items-center gap-1 justify-end">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-gray-600">Converted: {stats.converted}</span>
+                    </div>
+                    <div className="flex items-center gap-1 justify-end">
+                      <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
+                      <span className="text-gray-600">Synced: {stats.synced}</span>
                     </div>
                   </div>
-                  {expandedLead === lead.id && (
-                    <div className="border-t p-4 bg-gray-50">
-                      <div className="space-y-4">
-                        <div>
-                          <h4 className="font-medium mb-2">Lead Details</h4>
-                          <div className="grid grid-cols-2 gap-3 text-sm">
-                            <div>
-                              <p className="font-medium text-gray-700">Form</p>
-                              <p className="text-gray-600">
-                                {getFormBadge(lead.formName)}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="font-medium text-gray-700">Source</p>
-                              <p className="text-gray-600">{lead.source || "-"}</p>
-                            </div>
-                            {lead.hairLossStage && (
-                              <div className="col-span-2">
-                                <p className="font-medium text-gray-700">Hair Loss Stage</p>
-                                <p className="text-gray-600">{lead.hairLossStage}</p>
-                              </div>
-                            )}
-                            <div>
-                              <p className="font-medium text-gray-700">Age</p>
-                              <p className="text-gray-600">{lead.age || "-"}</p>
-                            </div>
-                            <div>
-                              <p className="font-medium text-gray-700">TeleCRM</p>
-                              <p className="text-gray-600">
-                                {getTelecrmBadge(lead.telecrmSynced)}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        {lead.message && (
-                          <div>
-                            <h4 className="font-medium mb-2 flex items-center gap-2">
-                              <MessageSquare className="h-4 w-4" />
-                              Message
-                            </h4>
-                            <div className="p-3 border rounded bg-white whitespace-pre-wrap text-sm">
-                              {lead.message}
-                            </div>
-                          </div>
-                        )}
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button size="sm" variant="outline" className="w-full">
-                              <MoreVertical className="h-4 w-4 mr-2" />
-                              Update Status
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            {["new","contacted","scheduled","converted","lost"].map((s) => (
-                              <DropdownMenuItem
-                                key={s}
-                                onClick={() => updateLeadStatus(lead.id, s as UIStatus)}
-                              >
-                                {s}
-                              </DropdownMenuItem>
-                            ))}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </div>
-                  )}
-                </Card>
-              );
-            })}
+                </div>
+              </Card>
+            ))}
           </div>
 
-          {/* Desktop Table View */}
-          <div className="hidden lg:block border rounded-lg overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-gray-50 border-b">
+          {/* Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-7 gap-4 mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="md:col-span-2">
+              <div className="relative">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                <Input
+                  placeholder="Search by name, phone, email, treatment, pincode..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
+                />
+              </div>
+            </div>
+            
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="bg-white border-gray-300 text-gray-900">
+                <Filter className="h-4 w-4 mr-2 text-gray-500" />
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-gray-300 text-gray-900">
+                <SelectItem value="all" className="focus:bg-gray-100">All Status</SelectItem>
+                <SelectItem value="new" className="focus:bg-gray-100">New</SelectItem>
+                <SelectItem value="contacted" className="focus:bg-gray-100">Contacted</SelectItem>
+                <SelectItem value="scheduled" className="focus:bg-gray-100">Scheduled</SelectItem>
+                <SelectItem value="converted" className="focus:bg-gray-100">Converted</SelectItem>
+                <SelectItem value="lost" className="focus:bg-gray-100">Lost</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={treatmentFilter} onValueChange={setTreatmentFilter}>
+              <SelectTrigger className="bg-white border-gray-300 text-gray-900">
+                <SelectValue placeholder="Treatment" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-gray-300 text-gray-900">
+                <SelectItem value="all" className="focus:bg-gray-100">All Treatments</SelectItem>
+                <SelectItem value="Brightening & Pigmentation Treatments" className="focus:bg-gray-100">Brightening & Pigmentation Treatments</SelectItem>
+                <SelectItem value="Laser Hair Reduction" className="focus:bg-gray-100">Laser Hair Reduction</SelectItem>
+                <SelectItem value="Anti -Ageing Solutions" className="focus:bg-gray-100">Anti -Ageing Solutions</SelectItem>
+                <SelectItem value="Revitalize Dull, Dry Skin" className="focus:bg-gray-100">Revitalize Dull, Dry Skin</SelectItem>
+                <SelectItem value="Receding Hairline Solutions" className="focus:bg-gray-100">Receding Hairline Solutions</SelectItem>
+                <SelectItem value="Genetic Hair Loss Treatment" className="focus:bg-gray-100">Genetic Hair Loss Treatment</SelectItem>
+                <SelectItem value="Laser Hair Reduction" className="focus:bg-gray-100">Laser Hair Reduction</SelectItem>
+                <SelectItem value="Hair fall / excessive shedding" className="focus:bg-gray-100">Hair Fall</SelectItem>
+                <SelectItem value="Thinning / reduced density" className="focus:bg-gray-100">Thinning</SelectItem>
+                <SelectItem value="Dandruff / flaky, itchy scalp" className="focus:bg-gray-100">Dandruff</SelectItem>
+                <SelectItem value="Oily scalp & greasy roots" className="focus:bg-gray-100">Oily Scalp</SelectItem>
+                <SelectItem value="Dry, frizzy, rough hair" className="focus:bg-gray-100">Dry Hair</SelectItem>
+                {/* Southern Spine Appointment Types */}
+                <SelectItem value="Back Pain" className="focus:bg-gray-100">Back Pain</SelectItem>
+                <SelectItem value="Neck Pain" className="focus:bg-gray-100">Neck Pain</SelectItem>
+                <SelectItem value="Joint Pain" className="focus:bg-gray-100">Joint Pain</SelectItem>
+                <SelectItem value="Muscular Pain" className="focus:bg-gray-100">Muscular Pain</SelectItem>
+                <SelectItem value="Others" className="focus:bg-gray-100">Others</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={formFilter} onValueChange={setFormFilter}>
+              <SelectTrigger className="bg-white border-gray-300 text-gray-900">
+                <Users className="h-4 w-4 mr-2 text-gray-500" />
+                <SelectValue placeholder="Form" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-gray-300 text-gray-900">
+                <SelectItem value="all" className="focus:bg-gray-100">All Forms</SelectItem>
+                {uniqueFormNames.map(formName => (
+                  <SelectItem key={formName} value={formName} className="focus:bg-gray-100">
+                    {formName === 'hairtreatment' ? 'Hair Treatment' : 
+                     formName === 'skin and hair leads' ? 'Skin & Hair' : 
+                     formName === 'southernspine' ? 'Southern Spine' :
+                     formName === 'website leads' ? 'Website Leads' :
+                     formName === 'appointment form' ? 'Appointment Form' :
+                     formName === 'Unknown' ? 'Unknown Form' : formName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={dateFilter} onValueChange={setDateFilter}>
+              <SelectTrigger className="bg-white border-gray-300 text-gray-900">
+                <Calendar className="h-4 w-4 mr-2 text-gray-500" />
+                <SelectValue placeholder="Date" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-gray-300 text-gray-900">
+                <SelectItem value="all" className="focus:bg-gray-100">All Time</SelectItem>
+                <SelectItem value="today" className="focus:bg-gray-100">Today</SelectItem>
+                <SelectItem value="week" className="focus:bg-gray-100">This Week</SelectItem>
+                <SelectItem value="month" className="focus:bg-gray-100">This Month</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Table */}
+          <div className="rounded-lg border border-gray-200 overflow-hidden">
+            <div className="relative w-full overflow-auto">
+              <table className="w-full caption-bottom text-sm">
+                <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th
-                      className="px-4 py-3 text-left cursor-pointer min-w-[140px]"
-                      onClick={() => handleSort("name")}
+                    <th 
+                      className="h-12 px-4 text-left align-middle font-medium text-gray-700 cursor-pointer hover:bg-gray-100 transition-colors"
+                      onClick={() => handleSort('name')}
                     >
                       <div className="flex items-center gap-1">
                         Name
-                        {sortConfig?.key === "name" &&
-                          (sortConfig.direction === "asc" ? (
-                            <ChevronUp className="h-4 w-4" />
-                          ) : (
-                            <ChevronDown className="h-4 w-4" />
-                          ))}
+                        {sortConfig?.key === 'name' && (
+                          sortConfig.direction === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
+                        )}
                       </div>
                     </th>
-                    <th className="px-4 py-3 text-left min-w-[160px]">Contact</th>
-                    <th className="px-4 py-3 text-left min-w-[140px]">Treatment</th>
-                    <th className="px-4 py-3 text-left min-w-[120px]">Form</th>
-                    <th className="px-4 py-3 text-left min-w-[120px]">Status</th>
-                    <th className="px-4 py-3 text-left min-w-[100px]">Sync</th>
-                    <th
-                      className="px-4 py-3 text-left cursor-pointer min-w-[140px]"
-                      onClick={() => handleSort("createdAt")}
+                    <th className="h-12 px-4 text-left align-middle font-medium text-gray-700">Contact</th>
+                    <th className="h-12 px-4 text-left align-middle font-medium text-gray-700">Treatment/Concern</th>
+                    <th className="h-12 px-4 text-left align-middle font-medium text-gray-700">Form</th>
+                    <th className="h-12 px-4 text-left align-middle font-medium text-gray-700">Status</th>
+                    <th className="h-12 px-4 text-left align-middle font-medium text-gray-700">Sync</th>
+                    <th 
+                      className="h-12 px-4 text-left align-middle font-medium text-gray-700 cursor-pointer hover:bg-gray-100 transition-colors"
+                      onClick={() => handleSort('createdAt')}
                     >
                       <div className="flex items-center gap-1">
-                        Created
-                        {sortConfig?.key === "createdAt" &&
-                          (sortConfig.direction === "asc" ? (
-                            <ChevronUp className="h-4 w-4" />
-                          ) : (
-                            <ChevronDown className="h-4 w-4" />
-                          ))}
+                        Date
+                        {sortConfig?.key === 'createdAt' && (
+                          sortConfig.direction === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
+                        )}
                       </div>
                     </th>
-                    <th className="px-4 py-3 text-left min-w-[140px]">Actions</th>
+                    <th className="h-12 px-4 text-left align-middle font-medium text-gray-700">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {loading ? (
                     <tr>
-                      <td colSpan={8} className="py-8 text-center">
-                        <RefreshCw className="h-4 w-4 mr-2 inline animate-spin" />
-                        Loading leads…
+                      <td colSpan={8} className="p-8 text-center text-gray-500">
+                        <div className="flex items-center justify-center gap-2">
+                          <RefreshCw className="h-4 w-4 animate-spin" />
+                          Loading leads...
+                        </div>
                       </td>
                     </tr>
                   ) : filteredLeads.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="py-8 text-center">
-                        No leads found
+                      <td colSpan={8} className="p-8 text-center text-gray-500">
+                        No leads found matching your criteria
                       </td>
                     </tr>
                   ) : (
                     filteredLeads.map((lead) => {
-                      const uiStatus = dbToUIStatus(lead.status);
-                      const d = formatDate(lead.createdAt);
+                      const formattedDate = formatDate(lead.createdAt)
                       return (
                         <Fragment key={lead.id}>
-                          <tr
-                            className="border-b hover:bg-gray-50 cursor-pointer"
+                          <tr 
+                            className="border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer"
                             onClick={() => toggleLeadExpansion(lead.id)}
                           >
-                            <td className="px-4 py-3">
-                              <div className="font-medium">{lead.name || "Unknown"}</div>
-                              {lead.city && (
-                                <div className="text-xs text-gray-600 flex items-center gap-1 mt-1">
-                                  <MapPin className="h-3 w-3" />
-                                  {lead.city}
-                                </div>
-                              )}
+                            <td className="p-4 align-middle font-medium text-gray-900">
+                              <div className="flex items-center gap-2">
+                                <div className={`w-2 h-2 rounded-full ${
+                                  lead.status === 'new' ? 'bg-blue-500' :
+                                  lead.status === 'contacted' ? 'bg-yellow-500' :
+                                  lead.status === 'scheduled' ? 'bg-purple-500' :
+                                  lead.status === 'converted' ? 'bg-green-500' : 'bg-red-500'
+                                }`} />
+                                {lead.name || 'Unknown'}
+                              </div>
                             </td>
-                            <td className="px-4 py-3">
+                            <td className="p-4 align-middle">
                               <div className="flex flex-col gap-1">
                                 <div className="flex items-center gap-2">
-                                  <Phone className="h-3.5 w-3.5 text-gray-500" />
-                                  <span className="font-medium">{lead.phone || "-"}</span>
+                                  <Phone className="h-3 w-3 text-blue-600" />
+                                  <span className="text-sm text-gray-700">{lead.phone || 'No phone'}</span>
                                 </div>
                                 {lead.email && (
                                   <div className="flex items-center gap-2">
-                                    <Mail className="h-3.5 w-3.5 text-gray-500" />
-                                    <span className="truncate max-w-[180px]">{lead.email}</span>
+                                    <Mail className="h-3 w-3 text-blue-600" />
+                                    <span className="text-sm text-gray-700 truncate max-w-[120px]">{lead.email}</span>
                                   </div>
                                 )}
                               </div>
                             </td>
-                            <td className="px-4 py-3">
-                              <div className="flex flex-col">
-                                <span>{lead.treatment || "-"}</span>
-                                {lead.hairLossStage && (
-                                  <span className="text-xs text-gray-600">
-                                    {lead.hairLossStage}
-                                  </span>
+                            <td className="p-4 align-middle">
+                              <div className="flex flex-col gap-1">
+                                <span className="text-sm font-medium text-gray-900">
+                                  {lead.treatment || lead.concern || "Not specified"}
+                                </span>
+                                {lead.pincode && (
+                                  <div className="flex items-center gap-1 text-xs text-gray-600">
+                                    <MapPin className="h-3 w-3" />
+                                    <span>{lead.pincode}</span>
+                                  </div>
                                 )}
+                                {lead.city && <span className="text-xs text-gray-600">{lead.city}</span>}
+                                {lead.age && <span className="text-xs text-gray-600">Age: {lead.age}</span>}
                               </div>
                             </td>
-                            <td className="px-4 py-3">{getFormBadge(lead.formName)}</td>
-                            <td className="px-4 py-3">
+                            <td className="p-4 align-middle">
+                              {getFormBadge(lead.formName)}
+                            </td>
+                            <td className="p-4 align-middle">
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                  <div>{getStatusBadge(uiStatus)}</div>
+                                  <div className="cursor-pointer">
+                                    {getStatusBadge(lead.status)}
+                                  </div>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                  {["new","contacted","scheduled","converted","lost"].map((s) => (
-                                    <DropdownMenuItem
-                                      key={s}
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        updateLeadStatus(lead.id, s as UIStatus);
-                                      }}
-                                    >
-                                      {s}
-                                    </DropdownMenuItem>
-                                  ))}
+                                <DropdownMenuContent className="bg-white border-gray-200 text-gray-900">
+                                  <DropdownMenuItem 
+                                    className="focus:bg-gray-100"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      updateLeadStatus(lead.id, 'new')
+                                    }}
+                                  >
+                                    New
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem 
+                                    className="focus:bg-gray-100"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      updateLeadStatus(lead.id, 'contacted')
+                                    }}
+                                  >
+                                    Contacted
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem 
+                                    className="focus:bg-gray-100"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      updateLeadStatus(lead.id, 'scheduled')
+                                    }}
+                                  >
+                                    Scheduled
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem 
+                                    className="focus:bg-gray-100"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      updateLeadStatus(lead.id, 'converted')
+                                    }}
+                                  >
+                                    Converted
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem 
+                                    className="focus:bg-gray-100"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      updateLeadStatus(lead.id, 'lost')
+                                    }}
+                                  >
+                                    Lost
+                                  </DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </td>
-                            <td className="px-4 py-3">
+                            <td className="p-4 align-middle">
                               {getTelecrmBadge(lead.telecrmSynced)}
                             </td>
-                            <td className="px-4 py-3">
-                              <div className="flex flex-col">
-                                <span>{d.date}</span>
-                                <span className="text-xs text-gray-500">{d.time}</span>
-                              </div>
+                            <td className="p-4 align-middle text-sm text-gray-600">
+                              {formattedDate.date}
+                              <br />
+                              <span className="text-xs">
+                                {formattedDate.time}
+                              </span>
                             </td>
-                            <td className="px-4 py-3">
+                            <td className="p-4 align-middle">
                               <div className="flex gap-2">
-                                <Button
-                                  size="sm"
-                                  variant="outline"
+                                <Button 
+                                  variant="outline" 
+                                  size="sm" 
+                                  className="h-8 bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100"
                                   onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleCall(lead.phone);
+                                    e.stopPropagation()
+                                    handleCall(lead.phone)
                                   }}
                                   disabled={!lead.phone}
                                 >
                                   <Phone className="h-3 w-3" />
                                 </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleEmail(lead.email);
-                                  }}
-                                  disabled={!lead.email}
-                                >
-                                  <Mail className="h-3 w-3" />
-                                </Button>
+                                {lead.email && (
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm" 
+                                    className="h-8 bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      handleEmail(lead.email)
+                                    }}
+                                  >
+                                    <Mail className="h-3 w-3" />
+                                  </Button>
+                                )}
                               </div>
                             </td>
                           </tr>
                           {expandedLead === lead.id && (
-                            <tr className="bg-gray-50">
+                            <tr className="bg-gray-50 border-b border-gray-200">
                               <td colSpan={8} className="p-4">
-                                <div className="grid grid-cols-2 gap-6">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                                   <div>
-                                    <h4 className="font-medium mb-3">Lead Details</h4>
-                                    <div className="space-y-2 text-sm">
-                                      <div>
-                                        <span className="font-medium text-gray-600">Source:</span>{" "}
-                                        <span>{lead.source || "-"}</span>
-                                      </div>
+                                    <h4 className="font-medium text-gray-900 mb-2">Lead Details</h4>
+                                    <div className="space-y-2 text-gray-700">
+                                      <div><span className="font-medium">Source:</span> {lead.source || 'Not specified'}</div>
+                                      <div><span className="font-medium">Age:</span> {lead.age || 'Not specified'}</div>
+                                      <div><span className="font-medium">City:</span> {lead.city || 'Not specified'}</div>
+                                      <div><span className="font-medium">Pincode:</span> {lead.pincode || 'Not specified'}</div>
+                                      <div><span className="font-medium">Consent:</span> {lead.consent ? 'Yes' : 'No'}</div>
                                       {lead.telecrmId && (
-                                        <div>
-                                          <span className="font-medium text-gray-600">TeleCRM ID:</span>{" "}
-                                          <span className="font-mono text-xs">{lead.telecrmId}</span>
-                                        </div>
+                                        <div><span className="font-medium">TeleCRM ID:</span> {lead.telecrmId}</div>
                                       )}
-                                      <div>
-                                        <span className="font-medium text-gray-600">Consent:</span>{" "}
-                                        <span>{lead.consent ? "Yes" : "No"}</span>
-                                      </div>
                                     </div>
                                   </div>
                                   <div>
-                                    <h4 className="font-medium mb-3 flex items-center gap-2">
-                                      <MessageSquare className="h-4 w-4" />
-                                      Message
-                                    </h4>
-                                    <div className="p-3 border rounded bg-white whitespace-pre-wrap text-sm">
-                                      {lead.message || "No message"}
+                                    <h4 className="font-medium text-gray-900 mb-2">Message</h4>
+                                    <p className="text-gray-700 bg-white p-3 rounded border border-gray-200">
+                                      {lead.message || "No message provided"}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <h4 className="font-medium text-gray-900 mb-2">Source Tracking</h4>
+                                    <div className="space-y-2 text-gray-700">
+                                      {lead.pageUrl && (
+                                        <div className="flex items-start gap-1">
+                                          <Globe className="h-3 w-3 mt-1 flex-shrink-0" />
+                                          <span className="text-xs break-all">{lead.pageUrl}</span>
+                                        </div>
+                                      )}
+                                      {lead.utmSource && (
+                                        <div><span className="font-medium">UTM Source:</span> {lead.utmSource}</div>
+                                      )}
+                                      {lead.utmMedium && (
+                                        <div><span className="font-medium">UTM Medium:</span> {lead.utmMedium}</div>
+                                      )}
+                                      {lead.utmCampaign && (
+                                        <div><span className="font-medium">UTM Campaign:</span> {lead.utmCampaign}</div>
+                                      )}
+                                      {lead.referrer && (
+                                        <div><span className="font-medium">Referrer:</span> {lead.referrer}</div>
+                                      )}
                                     </div>
                                   </div>
                                 </div>
@@ -803,7 +741,7 @@ export default function LeadsTable({
                             </tr>
                           )}
                         </Fragment>
-                      );
+                      )
                     })
                   )}
                 </tbody>
@@ -811,22 +749,37 @@ export default function LeadsTable({
             </div>
           </div>
 
-          {/* Empty State */}
-          {filteredLeads.length === 0 && !loading && (
-            <div className="text-center py-12">
-              <div className="mx-auto w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <Users className="h-8 w-8 text-gray-400" />
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No leads found</h3>
-              <p className="text-gray-600 max-w-md mx-auto">
-                {searchTerm || statusFilter !== "all" || treatmentFilter !== "all" || dateFilter !== "all"
-                  ? "Try adjusting your search or filters"
-                  : "No leads have been submitted yet"}
-              </p>
+          {/* Summary */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 text-sm text-gray-600 gap-2">
+            <div>
+              Showing {filteredLeads.length} of {leads.length} leads
+              {searchTerm && ` • Filtered by: "${searchTerm}"`}
+              {formFilter !== 'all' && ` • Form: ${
+                formFilter === 'hairtreatment' ? 'Hair Treatment' : 
+                formFilter === 'skin and hair leads' ? 'Skin & Hair' : 
+                formFilter === 'southernspine' ? 'Southern Spine' :
+                formFilter === 'website leads' ? 'Website Leads' :
+                formFilter === 'appointment form' ? 'Appointment Form' :
+                formFilter === 'Unknown' ? 'Unknown Form' : formFilter
+              }`}
             </div>
-          )}
+            <div className="flex gap-4">
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span>New: {leads.filter(l => l.status === 'new').length}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>Converted: {leads.filter(l => l.status === 'converted').length}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
+                <span>Synced: {leads.filter(l => l.telecrmSynced).length}</span>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
