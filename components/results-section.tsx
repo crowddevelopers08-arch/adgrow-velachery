@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const MODEL_IMAGE =
-  "/rejuvenating.jpg"; // replace with your actual image path
+  "https://ik.imagekit.io/7yen5ugz0/public/rejuvenating.jpg"; // replace with your actual image path
 
 const pillars = [
   {

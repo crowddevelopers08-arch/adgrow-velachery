@@ -17,23 +17,23 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/iconed.webp",
+        url: "https://ik.imagekit.io/7yen5ugz0/public/iconed.webp",
         sizes: "any",
       },
       {
-        url: "iconed.webp",
+        url: "https://ik.imagekit.io/7yen5ugz0/public/iconed.webp",
         sizes: "16x16",
         type: "image/png",
       },
       {
-        url: "iconed.webp",
+        url: "https://ik.imagekit.io/7yen5ugz0/public/iconed.webp",
         sizes: "32x32",
         type: "image/png",
       },
     ],
     apple: [
       {
-        url: "iconed.webp",
+        url: "https://ik.imagekit.io/7yen5ugz0/public/iconed.webp",
         sizes: "180x180",
         type: "image/png",
       },
@@ -41,13 +41,13 @@ export const metadata: Metadata = {
     other: [
       {
         rel: "icon",
-        url: "iconed.webp",
+        url: "https://ik.imagekit.io/7yen5ugz0/public/iconed.webp",
         sizes: "192x192",
         type: "image/png",
       },
       {
         rel: "icon",
-        url: "iconed.webp",
+        url: "https://ik.imagekit.io/7yen5ugz0/public/iconed.webp",
         sizes: "512x512",
         type: "image/png",
       },

@@ -294,20 +294,20 @@ interface Slide {
 
 const slides: Slide[] = [
   {
-    url: "/banner2.jpg",
-    rightImage: "/before1.webp",   // ✅ change to your image
+    url: "https://ik.imagekit.io/7yen5ugz0/public/banner2.jpg",
+    rightImage: "https://ik.imagekit.io/7yen5ugz0/public/before1.webp",   // ✅ change to your image
     headline: <>Discover <span style={{ color: '#ffffff', backgroundColor: '#f472b6',paddingLeft: '10px', paddingRight: '10px' }}>Velachery's Secret</span> To Beautiful Skin</>,
     sub: "Achieve your desired look with our Expert Beauty Solutions",
   },
   {
-    url: "/banners.jpg",
-    rightImage: "/before2.webp",   // ✅ change to your image
+    url: "https://ik.imagekit.io/7yen5ugz0/public/banners.jpg",
+    rightImage: "https://ik.imagekit.io/7yen5ugz0/public/before2.webp",   // ✅ change to your image
     headline: <>Glow Like Never <span style={{ color: '#ffffff', backgroundColor: '#f472b6',paddingLeft: '10px', paddingRight: '10px' }}>Before With Us</span></>,
     sub: "Premium skincare treatments tailored just for you",
   },
   {
-    url: "/banner3.jpg",
-    rightImage: "/before3.webp",   // ✅ change to your image
+    url: "https://ik.imagekit.io/7yen5ugz0/public/banner3.jpg",
+    rightImage: "https://ik.imagekit.io/7yen5ugz0/public/before3.webp",   // ✅ change to your image
     headline: <>Your Beauty Journey <span style={{ color: '#ffffff', backgroundColor: '#f472b6',paddingLeft: '10px', paddingRight: '10px' }}>Starts Here</span></>,
     sub: "Step in and experience the difference expert care makes",
   },

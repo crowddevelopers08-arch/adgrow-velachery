@@ -39,7 +39,7 @@ const services: Service[] = [
   {
     id: 2,
     tag: "02",
-    img: "/girl-receiving.jpg",
+    img: "https://ik.imagekit.io/7yen5ugz0/public/girl-receiving.jpg",
     title: "Laser Hair Reduction",
     subtitle: "Embrace Lasting Smoothness and Confidence.",
     accent: "#a0124a",

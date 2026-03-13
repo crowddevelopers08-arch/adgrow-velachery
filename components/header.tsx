@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function GrohairTopBar({
-  logoSrc = "/iconed.webp",
+  logoSrc = "https://ik.imagekit.io/7yen5ugz0/public/iconed.webp",
   phone = "+91 89706 56789",
   buttonText = "Call Now",
 }: Props) {

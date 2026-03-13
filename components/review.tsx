@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const DOCTOR_IMAGE = "/cosmetologist.jpg"; // replace with your actual image path
+const DOCTOR_IMAGE = "https://ik.imagekit.io/7yen5ugz0/public/cosmetologist.jpg"; // replace with your actual image path
 
 export default function CTABanner() {
   const ref = useRef(null);
