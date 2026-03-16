@@ -456,7 +456,7 @@ export default function BeautyServicesSection() {
     ? "22px 16px 22px"
     : isTablet
     ? "80px 32px 80px"
-    : "100px 60px 100px";
+    : "60px 60px 60px";
 
   const gridCols = isMobile ? "1fr" : "1fr 1fr";
   const gridGap  = isMobile ? "70px 0" : isTablet ? "65px 32px" : "75px 44px";

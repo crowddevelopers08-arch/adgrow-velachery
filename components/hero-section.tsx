@@ -212,7 +212,7 @@ export default function SpaHero() {
         </div>
 
         <div
-          className={`relative z-10 flex flex-col justify-center py-16 pr-10 pl-4 max-w-xl transition-all duration-700 ${
+          className={`relative z-10 flex flex-col justify-center py-10 pr-10 pl-4 max-w-xl transition-all duration-700 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
         >
