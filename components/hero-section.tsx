@@ -53,13 +53,14 @@ function ImagePanel({ mobile }: { mobile: boolean }) {
     return (
       <div
         style={{
-          backgroundImage: "url('https://leospa.vercel.app/assets/images/spa.png')",
+          backgroundImage: "url('https://ik.imagekit.io/xivdiehvf/imhuj.png')",
           backgroundSize: "cover",
-          backgroundPosition: "center top",
+          backgroundPosition: "center center",
           width: "100%",
-          height: "240px",
+          height: "300px",
           borderRadius: "16px",
           marginBottom: "24px",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
         }}
       />
     );
@@ -188,11 +189,17 @@ export default function SpaHero() {
         .delay-100 { animation-delay: 0.10s; }
         .delay-200 { animation-delay: 0.20s; }
         .delay-300 { animation-delay: 0.30s; }
+        @keyframes zoomInOut {
+          0%, 100% { transform: scale(1); }
+          50%       { transform: scale(1.08); }
+        }
         .hero-right-bg {
-          background-image: url('https://leospa.vercel.app/assets/images/spa.png');
+          background-image: url('https://ik.imagekit.io/xivdiehvf/imhuj.png');
           background-size: cover;
           background-position: center top;
           border-radius: 50% 0 0 50% / 50%;
+          animation: zoomInOut 8s ease-in-out infinite;
+          transform-origin: center center;
         }
       `}</style>
 
