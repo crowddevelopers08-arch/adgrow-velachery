@@ -77,7 +77,7 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
               <a
                 href="#contact"
-                className="flex items-center justify-center gap-2 px-4 py-3 md:px-5 md:py-3.5 lg:px-6 lg:py-4 rounded-full
+                className="flex items-center justify-center gap-2 px-4 py-3 md:px-5 md:py-3.5 lg:px-6 lg:py-4 rounded-md
                 bg-gradient-to-r from-[#ec4899] to-[#be185d]
                 hover:bg-gradient-to-r hover:from-[#F849C1] hover:to-[#B964DD]
                 text-white font-semibold text-sm md:text-base
@@ -91,7 +91,7 @@ export default function Hero() {
                 href="tel:+91 89706 56789"
                 className="inline-flex items-center justify-center gap-2 px-4 py-3 md:px-5 md:py-3.5 lg:px-8 lg:py-4 
                 bg-white hover:bg-gray-50 text-gray-800 font-bold text-sm md:text-base 
-                rounded-full shadow-lg hover:shadow-xl transition-all duration-300 
+                rounded-md shadow-lg hover:shadow-xl transition-all duration-300 
                 border-2 border-gray-200 w-full sm:w-auto"
               >
                 <span>Call Now</span>
@@ -218,7 +218,7 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
               <a
                 href="#contact"
-                className="flex items-center justify-center gap-2 px-4 py-3 md:px-5 md:py-3.5 rounded-full
+                className="flex items-center justify-center gap-2 px-4 py-3 md:px-5 md:py-3.5 rounded-md
                 bg-gradient-to-r from-[#ec4899] to-[#be185d]
                 hover:bg-gradient-to-r hover:from-[#F849C1] hover:to-[#B964DD]
                 text-white font-semibold text-sm md:text-base
@@ -232,7 +232,7 @@ export default function Hero() {
                 href="tel:+91 89706 56789"
                 className="inline-flex items-center justify-center gap-2 px-4 py-3 md:px-5 md:py-3.5 
                 bg-white hover:bg-gray-50 text-gray-800 font-bold text-sm md:text-base 
-                rounded-full shadow-lg hover:shadow-xl transition-all duration-300 
+                rounded-md shadow-lg hover:shadow-xl transition-all duration-300 
                 border-2 border-gray-200 w-full sm:w-auto"
               >
                 <span>Call Now</span>

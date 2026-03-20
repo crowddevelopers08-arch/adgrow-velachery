@@ -66,7 +66,7 @@ export default function Header() {
           <div className="flex items-center gap-2 lg:gap-3 justify-end">
             <a
               href="tel:+918970656789"
-              className="hidden md:flex items-center gap-1.5 px-3 lg:px-4 py-2 rounded-full text-xs lg:text-sm font-semibold text-white whitespace-nowrap shadow-md transition-all duration-300 hover:shadow-lg hover:scale-105"
+              className="hidden md:flex items-center gap-1.5 px-3 lg:px-4 py-2 rounded-md text-xs lg:text-sm font-semibold text-white whitespace-nowrap shadow-md transition-all duration-300 hover:shadow-lg hover:scale-105"
               style={{ background: 'linear-gradient(135deg,#ec4899,#be185d)' }}
             >
               <Phone className="w-3.5 h-3.5 flex-shrink-0" />
@@ -74,7 +74,7 @@ export default function Header() {
             </a>
             <a
               href="#contact"
-              className="hidden md:flex items-center gap-1.5 px-3 lg:px-4 py-2 rounded-full text-xs lg:text-sm font-semibold text-white whitespace-nowrap shadow-md transition-all duration-300 hover:shadow-lg hover:scale-105"
+              className="hidden md:flex items-center gap-1.5 px-3 lg:px-4 py-2 rounded-md text-xs lg:text-sm font-semibold text-white whitespace-nowrap shadow-md transition-all duration-300 hover:shadow-lg hover:scale-105"
               style={{ background: 'linear-gradient(135deg,#ec4899,#be185d)' }}
             >
               <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
@@ -120,7 +120,7 @@ export default function Header() {
             <div className="flex gap-2 mt-4">
               <a
                 href="tel:+918970656789"
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-full text-sm font-semibold text-white shadow-md"
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-md text-sm font-semibold text-white shadow-md"
                 style={{ background: 'linear-gradient(135deg,#ec4899,#be185d)' }}
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -129,7 +129,7 @@ export default function Header() {
               </a>
               <a
                 href="#contact"
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-full text-sm font-semibold text-white shadow-md"
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-md text-sm font-semibold text-white shadow-md"
                 style={{ background: 'linear-gradient(135deg,#ec4899,#be185d)' }}
                 onClick={() => setMobileMenuOpen(false)}
               >
