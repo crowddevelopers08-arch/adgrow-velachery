@@ -471,7 +471,7 @@ export default function GloskinApartSection() {
         }
       `}</style>
 
-      <section className="gs2" ref={section.ref}>
+      <section id="about" className="gs2" ref={section.ref}>
         {/* ══ METRICS STRIP ══ */}
         <div className="gs2-metrics">
           {metrics.map((m, i) => (

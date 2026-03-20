@@ -5,13 +5,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 
 const images = [
-  { src: "https://ik.imagekit.io/7yen5ugz0/public/before1.webp", alt: "Before After 1" },
-  { src: "https://ik.imagekit.io/7yen5ugz0/public/before2.webp", alt: "Before After 2" },
-  { src: "https://ik.imagekit.io/7yen5ugz0/public/Hydrafacial-2.webp", alt: "Before After 3" },
-  { src: "https://ik.imagekit.io/7yen5ugz0/public/before4.webp", alt: "Before After 3" },
-  { src: "https://ik.imagekit.io/7yen5ugz0/public/before3.webp", alt: "Before After 4" },
-  { src: "https://ik.imagekit.io/7yen5ugz0/public/before5.webp", alt: "Before After 5" },
-  { src: "https://ik.imagekit.io/7yen5ugz0/public/before6.webp", alt: "Before After 6" },
+  { src: "https://ik.imagekit.io/ti3453sgoo/before1.webp", alt: "Before After 1" },
+  { src: "https://ik.imagekit.io/ti3453sgoo/before2.webp", alt: "Before After 2" },
+  { src: "https://ik.imagekit.io/ti3453sgoo/Hydrafacial-2.webp", alt: "Before After 3" },
+  { src: "https://ik.imagekit.io/ti3453sgoo/before4.webp", alt: "Before After 3" },
+  { src: "https://ik.imagekit.io/ti3453sgoo/before3.webp", alt: "Before After 4" },
+  { src: "https://ik.imagekit.io/ti3453sgoo/before5.webp", alt: "Before After 5" },
+  { src: "https://ik.imagekit.io/ti3453sgoo/before6.webp", alt: "Before After 6" },
 ];
 
 const ImageGridCarousel = () => {
@@ -119,7 +119,8 @@ const ImageGridCarousel = () => {
           font-family: 'Playfair Display', serif;
         }
       `}</style>
-      <section 
+      <section
+        id="gallery"
         className="cvg-section w-full px-4 sm:px-5 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10 lg:py-12"
       >
         <div className="max-w-7xl mx-auto">

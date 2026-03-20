@@ -39,7 +39,7 @@ const services: Service[] = [
   {
     id: 2,
     tag: "02",
-    img: "https://ik.imagekit.io/7yen5ugz0/public/girl-receiving.jpg",
+    img: "https://ik.imagekit.io/ti3453sgoo/girl-receiving.jpg",
     title: "Laser Hair Reduction",
     subtitle: "Embrace Lasting Smoothness and Confidence.",
     accent: "#a0124a",
@@ -449,7 +449,7 @@ const lotusPositions: LotusPos[] = [
 ];
 
 /* ── Main Section ── */
-export default function BeautyServicesSection() {
+export default function   BeautyServicesSection() {
   const { isMobile, isTablet, isDesktop } = useBreakpoint();
 
   const sectionPadding = isMobile
@@ -463,7 +463,7 @@ export default function BeautyServicesSection() {
   const gridMaxW = isDesktop ? "1060px" : "100%";
 
   return (
-    <section
+    <section id="services"
       style={{
         fontFamily: "'DM Sans', sans-serif",
         background:

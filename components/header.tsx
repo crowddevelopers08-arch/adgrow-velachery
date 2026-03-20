@@ -1,110 +1,145 @@
-// components/GrohairTopBar.tsx
-"use client";
+'use client'
 
-import Image from "next/image";
+import { useState, useEffect } from 'react';
+import { Phone, Menu, X, Calendar } from 'lucide-react';
+import Image from 'next/image';
 
-type Props = {
-  logoSrc?: string;
-  phone?: string;
-  buttonText?: string;
-};
+export default function Header() {
+  
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-export default function GrohairTopBar({
-  logoSrc = "https://ik.imagekit.io/7yen5ugz0/public/iconed.webp",
-  phone = "+91 89706 56789",
-  buttonText = "Call Now",
-}: Props) {
-  const telHref = `tel:${phone.replace(/\s+/g, "")}`;
-
-  const handleCallClick = () => {
-    window.location.href = telHref;
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <>
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Lato:wght@400;700&display=swap');
+    <header
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
+        scrolled
+          ? 'bg-white/95 backdrop-blur-md shadow-lg'
+          : 'bg-white/80 backdrop-blur-sm shadow-sm'
+      }`}
+    >
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4 py-3">
 
-        .topbar-btn {
-          background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
-          color: #ffffff;
-          font-family: 'Lato', sans-serif;
-          font-weight: 700;
-          border-radius: 4px;
-          border: 2px solid rgba(255, 255, 255, 0.3);
-          cursor: pointer;
-          letter-spacing: 0.05em;
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          white-space: nowrap;
-        }
-
-        .topbar-btn:hover {
-          transform: scale(1.02);
-        }
-
-        .topbar-btn:active {
-          transform: scale(0.98);
-        }
-      `}</style>
-
-      {/* Spacer */}
-      <div className="h-[70px] xs:h-[75px] sm:h-[80px] md:h-[85px] lg:h-[90px] xl:h-[95px] 2xl:h-[100px]" />
-
-      <header
-        className="fixed top-0 left-0 right-0 z-50 w-full bg-white border-b border-gray-100"
-        style={{ fontFamily: "'Lato', sans-serif" }}
-      >
-        <div className="mx-auto w-full max-w-screen-2xl px-4 xs:px-5 sm:px-6 md:px-10 lg:px-20 xl:px-28 2xl:px-36">
-          <div className="flex items-center justify-between py-3 xs:py-3.5 sm:py-4 md:py-4 lg:py-4.5 xl:py-5 2xl:py-5.5">
-
-            {/* Left: Logo */}
-            <div className="flex items-center">
-              <div className="relative h-[55px] w-[180px] xs:h-[48px] xs:w-[170px]
-                              sm:h-[50px] sm:w-[180px] md:h-[55px] md:w-[200px]
-                              lg:h-[65px] lg:w-[250px] xl:h-[75px] xl:w-[300px]
-                              2xl:h-[85px] 2xl:w-[350px]">
-                <Image
-                  src={logoSrc}
-                  alt="Advanced GloSkin"
-                  fill
-                  priority
-                  sizes="(max-width: 640px) 180px, (max-width: 768px) 170px, (max-width: 1024px) 180px, (max-width: 1280px) 200px, (max-width: 1536px) 300px, 350px"
-                  className="object-contain object-left"
-                />
-              </div>
-            </div>
-
-            {/* Right: Call Now Button */}
-            <div className="flex items-center">
-              <button
-                type="button"
-                onClick={handleCallClick}
-                aria-label={`Call ${phone}`}
-                className="topbar-btn px-5 py-2.5 sm:px-6 sm:py-3 md:px-5 md:py-2.5 text-sm sm:text-base md:text-base"
-              >
-                {/* Phone Icon */}
-                <svg
-                  className="w-4 h-4 mr-2"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M6.6 10.8c1.6 3.1 3.5 5 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.9.6.6 0 1 .4 1 1V21c0 .6-.4 1-1 1C10.4 22 2 13.6 2 3c0-.6.4-1 1-1h4.2c.6 0 1 .4 1 1 0 1.4.2 2.7.6 3.9.1.4 0 .8-.3 1.1L6.6 10.8Z"
-                    fill="currentColor"
-                  />
-                </svg>
-
-                <span className="font-semibold">{buttonText}</span>
-              </button>
-            </div>
-
+          {/* Left — Logo */}
+          <div className="relative w-32 md:w-40 h-9 md:h-11 flex-shrink-0 transition-transform duration-300 hover:scale-105">
+            <Image
+              src="https://ik.imagekit.io/ti3453sgoo/iconed.webp"
+              alt="Swetika Skin Clinic"
+              fill
+              className="object-contain object-left"
+              priority
+            />
           </div>
+
+          {/* Center — Nav links */}
+          <nav className="hidden md:flex items-center justify-center gap-0.5 lg:gap-1">
+            {[
+              { label: 'Home',  href: '/'  },
+              { label: 'About',    href: '#about'    },
+              { label: 'Services', href: '#services' },
+              { label: 'Offers',   href: '#offers'   },
+              { label: 'Results',  href: '#results'  },
+              { label: 'Reviews',  href: '#reviews'  },
+              { label: 'FAQ',      href: '#faq'      },
+              { label: 'Contact',  href: '#contact'  },
+            ].map(({ label, href }) => (
+              <a
+                key={href}
+                href={href}
+                className="relative group px-2.5 py-1.5 text-[13px] lg:text-sm font-medium text-gray-600 hover:text-[#ec4899] transition-colors duration-200 whitespace-nowrap rounded-md hover:bg-pink-50"
+              >
+                {label}
+                <span className="absolute bottom-0 left-2.5 right-2.5 h-0.5 bg-[#ec4899] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
+              </a>
+            ))}
+          </nav>
+
+          {/* Right — CTA buttons + mobile hamburger */}
+          <div className="flex items-center gap-2 lg:gap-3 justify-end">
+            <a
+              href="tel:+918970656789"
+              className="hidden md:flex items-center gap-1.5 px-3 lg:px-4 py-2 rounded-full text-xs lg:text-sm font-semibold text-white whitespace-nowrap shadow-md transition-all duration-300 hover:shadow-lg hover:scale-105"
+              style={{ background: 'linear-gradient(135deg,#ec4899,#be185d)' }}
+            >
+              <Phone className="w-3.5 h-3.5 flex-shrink-0" />
+              <span>+91 89706 56789</span>
+            </a>
+            <a
+              href="#contact"
+              className="hidden md:flex items-center gap-1.5 px-3 lg:px-4 py-2 rounded-full text-xs lg:text-sm font-semibold text-white whitespace-nowrap shadow-md transition-all duration-300 hover:shadow-lg hover:scale-105"
+              style={{ background: 'linear-gradient(135deg,#ec4899,#be185d)' }}
+            >
+              <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
+              <span>Book Now</span>
+            </a>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              {mobileMenuOpen
+                ? <X    className="w-6 h-6 text-gray-700" />
+                : <Menu className="w-6 h-6 text-gray-700" />}
+            </button>
+          </div>
+
         </div>
-      </header>
-    </>
+
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-gray-100 pb-4">
+            {/* 2-col grid of links */}
+            <div className="grid grid-cols-2 gap-1 pt-3">
+              {[
+                { label: 'Services', href: '#services' },
+                { label: 'Offers',   href: '#offers'   },
+                { label: 'Results',  href: '#results'  },
+                { label: 'Gallery',  href: '#gallery'  },
+                { label: 'About',    href: '#about'    },
+                { label: 'Reviews',  href: '#reviews'  },
+                { label: 'FAQ',      href: '#faq'      },
+                { label: 'Contact',  href: '#contact'  },
+              ].map(({ label, href }) => (
+                <a
+                  key={href}
+                  href={href}
+                  className="py-2.5 px-3 text-sm font-medium text-gray-700 hover:text-[#ec4899] hover:bg-pink-50 rounded-lg transition-colors text-center"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
+            {/* CTA buttons */}
+            <div className="flex gap-2 mt-4">
+              <a
+                href="tel:+918970656789"
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-full text-sm font-semibold text-white shadow-md"
+                style={{ background: 'linear-gradient(135deg,#ec4899,#be185d)' }}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Phone className="w-4 h-4" />
+                <span>Call Now</span>
+              </a>
+              <a
+                href="#contact"
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-full text-sm font-semibold text-white shadow-md"
+                style={{ background: 'linear-gradient(135deg,#ec4899,#be185d)' }}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Calendar className="w-4 h-4" />
+                <span>Book Now</span>
+              </a>
+            </div>
+          </div>
+        )}
+      </div>
+    </header>
   );
 }

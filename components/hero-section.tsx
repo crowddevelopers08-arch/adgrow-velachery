@@ -1,266 +1,280 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { Star, Sparkles, TrendingUp, User } from 'lucide-react';
+import Image from 'next/image';
+import { DM_Sans, Playfair_Display } from 'next/font/google';
 
-function TropicalPlant() {
+const dmSans = DM_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
+const playfair = Playfair_Display({ subsets: ['latin'], weight: ['700', '800', '900'] });
+
+const icons = [User, User, User, User];
+
+export default function Hero() {
   return (
-    <svg
-      viewBox="0 0 220 520"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-32 h-auto absolute -left-4 top-1/2 -translate-y-1/2 drop-shadow-md"
-      style={{ animation: "sway 6s ease-in-out infinite" }}
-    >
-      <path d="M30 200 Q-20 80 80 20 Q70 90 30 200Z" fill="#4caf50" opacity="0.92" />
-      <path d="M30 200 Q-20 80 80 20" stroke="#388e3c" strokeWidth="1.5" fill="none" />
-      <path d="M40 240 Q130 140 200 160 Q130 180 40 240Z" fill="#66bb6a" opacity="0.88" />
-      <path d="M40 240 Q130 140 200 160" stroke="#388e3c" strokeWidth="1.5" fill="none" />
-      <path d="M50 300 Q10 380 80 420 Q60 360 50 300Z" fill="#43a047" opacity="0.82" />
-      <path d="M50 300 Q10 380 80 420" stroke="#2e7d32" strokeWidth="1.5" fill="none" />
-      <path d="M80 160 Q160 90 180 40 Q160 110 80 160Z" fill="#81c784" opacity="0.78" />
-      <path d="M80 160 Q160 90 180 40" stroke="#388e3c" strokeWidth="1" fill="none" />
-      <path d="M60 320 Q160 330 200 290 Q150 340 60 320Z" fill="#66bb6a" opacity="0.72" />
-      <path d="M60 320 Q160 330 200 290" stroke="#388e3c" strokeWidth="1.2" fill="none" />
-      <path d="M45 360 Q0 430 60 490 Q50 420 45 360Z" fill="#388e3c" opacity="0.7" />
-      <path d="M45 360 Q0 430 60 490" stroke="#2e7d32" strokeWidth="1.2" fill="none" />
-      <path d="M45 200 Q50 320 55 490" stroke="#5d4037" strokeWidth="5" strokeLinecap="round" />
-      <ellipse cx="82" cy="268" rx="5" ry="9" fill="#ef5350" opacity="0.85" />
-      <ellipse cx="99" cy="282" rx="9" ry="5" fill="#ef5350" opacity="0.85" transform="rotate(-20 99 282)" />
-      <ellipse cx="65" cy="282" rx="9" ry="5" fill="#ef5350" opacity="0.85" transform="rotate(20 65 282)" />
-      <ellipse cx="82" cy="300" rx="5" ry="9" fill="#ef5350" opacity="0.85" />
-      <circle cx="82" cy="285" r="10" fill="#ef5350" opacity="0.9" />
-      <circle cx="82" cy="285" r="6" fill="#ff8a80" />
-      <circle cx="82" cy="285" r="3" fill="#ffeb3b" />
-      <ellipse cx="110" cy="200" rx="5" ry="9" fill="#ef9a9a" opacity="0.82" transform="rotate(20 110 200)" />
-      <line x1="110" y1="209" x2="100" y2="228" stroke="#5d4037" strokeWidth="2" />
-    </svg>
-  );
-}
+    <section className={`${dmSans.className} relative pt-16 max-sm:pt-22 md:pt-24 lg:pt-32 pb-12 md:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden`}>
+      {/* Background Gradient with Responsive Blobs */}
+      <div className="absolute inset-0 bg-gradient-to-br from-pink-50 via-rose-50 to-white">
+        <div className="absolute top-10 md:top-20 right-0 w-48 h-48 md:w-64 md:h-64 lg:w-96 lg:h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl md:blur-2xl lg:blur-3xl opacity-20 md:opacity-30 animate-pulse"></div>
+        <div
+          className="absolute bottom-0 left-0 w-48 h-48 md:w-64 md:h-64 lg:w-96 lg:h-96 bg-rose-200 rounded-full mix-blend-multiply filter blur-xl md:blur-2xl lg:blur-3xl opacity-20 md:opacity-30 animate-pulse"
+          style={{ animationDelay: '1000ms' }}
+        ></div>
+        <div
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 md:w-64 md:h-64 lg:w-96 lg:h-96 bg-pink-100 rounded-full mix-blend-multiply filter blur-xl md:blur-2xl lg:blur-3xl opacity-10 md:opacity-20 animate-pulse"
+          style={{ animationDelay: '2000ms' }}
+        ></div>
+      </div>
 
-function PlayIcon() {
-  return (
-    <span className="flex items-center justify-center w-10 h-10 rounded-full border border-[#ec4899] transition-colors group-hover:bg-[#ec4899]/10 flex-shrink-0">
-      <svg width="11" height="13" viewBox="0 0 11 13" fill="none" className="ml-0.5">
-        <path d="M1 1.2L10 6.5L1 11.8V1.2Z" fill="#ec4899" stroke="#ec4899" strokeWidth="1" strokeLinejoin="round" />
-      </svg>
-    </span>
-  );
-}
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-10 lg:gap-12 items-center max-sm:gap-5">
+          {/* Left Content - Only visible on desktop */}
+          <div className="hidden lg:block space-y-6 md:space-y-8 animate-in slide-in-from-left duration-700">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-white/90 backdrop-blur-md px-4 py-2 md:px-5 md:py-2.5 rounded-full shadow-lg border border-pink-100">
+              <Sparkles className="w-3 h-3 md:w-4 md:h-4 text-[#ec4899]" />
+              <span className="text-xs md:text-sm font-bold bg-gradient-to-r from-[#ec4899] to-[#be185d] bg-clip-text text-transparent">
+                #1 Skin Clinic In Velachery
+              </span>
+            </div>
 
-// The image panel — reused in both desktop (absolute) and mobile (inline)
-function ImagePanel({ mobile }: { mobile: boolean }) {
-  if (mobile) {
-    return (
-      <div
-        style={{
-          backgroundImage: "url('https://ik.imagekit.io/xivdiehvf/imhuj.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center center",
-          width: "100%",
-          height: "300px",
-          borderRadius: "16px",
-          marginBottom: "24px",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
-        }}
-      />
-    );
-  }
-  return (
-    <div className="hero-right-bg absolute right-0 top-0 bottom-0 w-[42%] z-0" />
-  );
-}
-
-export default function SpaHero() {
-  const [visible, setVisible] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 50);
-
-    // detect mobile
-    const check = () => setIsMobile(window.innerWidth <= 640);
-    check();
-    window.addEventListener("resize", check);
-
-    return () => {
-      clearTimeout(t);
-      window.removeEventListener("resize", check);
-    };
-  }, []);
-
-  const handleBookNow = () => {
-    const formElement = document.getElementById('appointment-form');
-    if (formElement) {
-      formElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  };
-
-  /* ── MOBILE LAYOUT ── */
-  if (isMobile) {
-    return (
-      <>
-        <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap');
-          @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(28px); }
-            to   { opacity: 1; transform: translateY(0); }
-          }
-          .font-playfair { font-family: 'Playfair Display', serif; }
-          .font-dm       { font-family: 'DM Sans', sans-serif; }
-          .animate-fadeUp { animation: fadeUp 0.85s ease both; }
-          .delay-100 { animation-delay: 0.10s; }
-          .delay-200 { animation-delay: 0.20s; }
-          .delay-300 { animation-delay: 0.30s; }
-        `}</style>
-
-        <section className="font-dm bg-white min-h-screen flex flex-col overflow-hidden">
-          {/* pink accent bar */}
-          <div
-            className="w-full h-[3px] opacity-70 flex-shrink-0"
-            style={{ background: "linear-gradient(90deg,#f9a8d4,#ec4899,#f9a8d4)" }}
-          />
-
-          {/* Text block */}
-          <div
-            className={`flex flex-col px-5 pt-8 pb-0 transition-all duration-700 ${visible ? "opacity-100" : "opacity-0"}`}
-          >
-            <p className="font-dm text-[11px] font-medium tracking-[0.18em] uppercase text-[#ec4899] mb-4 animate-fadeUp">
-              ✦ Premium Beauty Studio · Velachery ✦
-            </p>
-
-            <h1
-              className="font-playfair font-black text-gray-900 mb-4 animate-fadeUp delay-100"
-              style={{ fontSize: "30px", lineHeight: 1.15, letterSpacing: "-0.01em" }}
-            >
-              Discover{" "}
-              <span style={{ color: "#ffffff", backgroundColor: "#f472b6", paddingLeft: "8px", paddingRight: "8px" }}>
-                Velachery&apos;s Secret
-              </span>{" "}
-              To Beautiful Skin
+            {/* Heading */}
+            <h1 className={`${playfair.className} text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight md:leading-tight`}>
+              Get Unparalleled{' '}
+              <span className="relative inline-block">
+                <span className="bg-gradient-to-r from-[#ec4899] to-[#be185d] bg-clip-text text-transparent">
+                  Skin Results
+                </span>
+                <svg
+                  className="absolute -bottom-1 md:-bottom-2 left-0 w-full"
+                  height="8" 
+                  viewBox="0 0 200 8"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M0 4 Q50 0, 100 4 T200 4"
+                    fill="none"
+                    stroke="url(#gradient)"
+                    strokeWidth="2" 
+                    className="md:stroke-width-3"
+                  />
+                  <defs>
+                    <linearGradient id="gradient">
+                      <stop offset="0%" stopColor="#B964DD" />
+                      <stop offset="100%" stopColor="#F849C1" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </span>{' '}
+              That You Actually Dream Of
             </h1>
 
-            <p className="font-dm text-[13.5px] leading-[1.75] text-gray-500 mb-6 animate-fadeUp delay-200">
-              Achieve your desired look with our Expert Beauty Solutions
+            {/* Subtitle */}
+            <p className="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed">
+              Advanced Dermatology Solutions for Velachery, Confident Skin
             </p>
 
-            {/* ── IMAGE HERE — between paragraph and buttons ── */}
-            <ImagePanel mobile={true} />
-
-            {/* Buttons */}
-            <div className="flex flex-col gap-3 animate-fadeUp delay-300 pb-8">
-              <button
-                onClick={handleBookNow}
-                className="font-dm font-medium text-sm text-white rounded-md px-9 py-[14px] transition-all duration-200 active:scale-95 text-center"
-                style={{
-                  background: "linear-gradient(135deg,#ec4899 0%,#be185d 100%)",
-                  boxShadow: "0 8px 28px rgba(236,72,153,0.38)",
-                }}
+            {/* Buttons - Only visible on desktop in left column */}
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+              <a
+                href="#contact"
+                className="flex items-center justify-center gap-2 px-4 py-3 md:px-5 md:py-3.5 lg:px-6 lg:py-4 rounded-full
+                bg-gradient-to-r from-[#ec4899] to-[#be185d]
+                hover:bg-gradient-to-r hover:from-[#F849C1] hover:to-[#B964DD]
+                text-white font-semibold text-sm md:text-base
+                shadow-lg hover:shadow-xl
+                transition-all duration-300 w-full sm:w-auto"
               >
-                Book Your Appointment Now!
-              </button>
+                <span>Book Your Consultation</span>
+                <TrendingUp className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
+              </a>
+              <a
+                href="tel:+91 89706 56789"
+                className="inline-flex items-center justify-center gap-2 px-4 py-3 md:px-5 md:py-3.5 lg:px-8 lg:py-4 
+                bg-white hover:bg-gray-50 text-gray-800 font-bold text-sm md:text-base 
+                rounded-full shadow-lg hover:shadow-xl transition-all duration-300 
+                border-2 border-gray-200 w-full sm:w-auto"
+              >
+                <span>Call Now</span>
+              </a>
+            </div>
 
-              <button className="group flex items-center gap-3 bg-transparent border-0 font-dm text-sm text-gray-800">
-                <PlayIcon />
-                Watch our story
-              </button>
+            {/* Stats Card */}
+            <div className="bg-white/90 backdrop-blur-md p-3 md:p-4 lg:p-5 rounded-2xl shadow-xl border border-pink-100 w-full max-w-md">
+              <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-4">
+                <div className="flex -space-x-2 md:-space-x-3">
+                  {icons.map((Icon, index) => (
+                    <div
+                      key={index}
+                      className="w-10 h-10
+                                rounded-full
+                                bg-gradient-to-r from-[#ec4899] to-[#be185d]
+                                flex items-center justify-center
+                                border-2 border-white"
+                    >
+                      <Icon className="w-5 h-5 text-white" />
+                    </div>
+                  ))}
+                </div>
+                <div className="text-center sm:text-left">
+                  <div className="flex justify-center sm:justify-start gap-0.5 md:gap-1 mb-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 fill-yellow-400 text-yellow-400"
+                      />
+                    ))}
+                  </div>
+                  <p className="text-sm md:text-base font-bold text-gray-800">
+                    15K+ Clients Transformed
+                  </p>
+                  <p className="text-xs md:text-sm text-gray-500">Trusted by thousands</p>
+                </div>
+              </div>
             </div>
           </div>
-        </section>
-      </>
-    );
-  }
 
-  /* ── DESKTOP LAYOUT — completely untouched ── */
-  return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap');
-        @keyframes sway {
-          0%, 100% { transform: translateY(-50%) rotate(-1deg); }
-          50%       { transform: translateY(-50%) rotate(1.5deg); }
-        }
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(28px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .font-playfair { font-family: 'Playfair Display', serif; }
-        .font-dm       { font-family: 'DM Sans', sans-serif; }
-        .animate-fadeUp { animation: fadeUp 0.85s ease both; }
-        .delay-100 { animation-delay: 0.10s; }
-        .delay-200 { animation-delay: 0.20s; }
-        .delay-300 { animation-delay: 0.30s; }
-        @keyframes zoomInOut {
-          0%, 100% { transform: scale(1); }
-          50%       { transform: scale(1.08); }
-        }
-        .hero-right-bg {
-          background-image: url('https://ik.imagekit.io/xivdiehvf/imhuj.png');
-          background-size: cover;
-          background-position: center top;
-          border-radius: 50% 0 0 50% / 50%;
-          animation: zoomInOut 8s ease-in-out infinite;
-          transform-origin: center center;
-        }
-      `}</style>
+          {/* Mobile Content - Visible only on mobile/tablet */}
+          <div className="lg:hidden space-y-6 md:space-y-8">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-white/90 backdrop-blur-md px-4 py-2 md:px-5 md:py-2.5 rounded-full shadow-lg border border-pink-100">
+              <Sparkles className="w-3 h-3 md:w-4 md:h-4 text-[#ec4899]" />
+              <span className="text-xs md:text-sm font-bold bg-gradient-to-r from-[#ec4899] to-[#be185d] bg-clip-text text-transparent">
+                #1 Skin Clinic In Chennai
+              </span>
+            </div>
 
-      <section
-        className="font-dm relative min-h-screen grid overflow-hidden bg-white"
-        style={{ gridTemplateColumns: "180px 1fr 480px" }}
-      >
-        <div
-          className="absolute top-0 left-0 right-0 h-[3px] z-10 opacity-70"
-          style={{ background: "linear-gradient(90deg,#f9a8d4,#ec4899,#f9a8d4)" }}
-        />
+            {/* Heading */}
+            <h1 className={`${playfair.className} text-2xl sm:text-3xl md:text-4xl font-bold leading-tight md:leading-tight max-sm:mb-2`}>
+              Get Unparalleled{' '}
+              <span className="relative inline-block">
+                <span className="bg-gradient-to-r from-[#ec4899] to-[#be185d] bg-clip-text text-transparent">
+                  Skin Results
+                </span>
+                <svg
+                  className="absolute -bottom-1 md:-bottom-2 left-0 w-full"
+                  height="8" 
+                  viewBox="0 0 200 8"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M0 4 Q50 0, 100 4 T200 4"
+                    fill="none"
+                    stroke="url(#gradient)"
+                    strokeWidth="2" 
+                    className="md:stroke-width-3"
+                  />
+                  <defs>
+                    <linearGradient id="gradient">
+                      <stop offset="0%" stopColor="#B964DD" />
+                      <stop offset="100%" stopColor="#F849C1" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </span>{' '}
+              That You Actually Dream Of
+            </h1>
 
-        <ImagePanel mobile={false} />
+            {/* Subtitle - Comes BEFORE image on mobile */}
+            <p className="text-base md:text-lg text-gray-600 leading-relaxed">
+              Advanced Dermatology Solutions for Radiant, Confident Skin
+            </p>
+          </div>
 
-        <div className="relative z-10 flex items-center">
-          <TropicalPlant />
-        </div>
+          {/* Image Section - Visible on all screens */}
+          <div className="relative animate-in slide-in-from-right duration-700 delay-300">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#ec4899] to-[#be185d] rounded-full filter blur-xl md:blur-2xl lg:blur-3xl opacity-10 md:opacity-20 animate-pulse"></div>
+            <div className="relative">
+              <div className="relative bg-gradient-to-br from-white to-cyan-50 rounded-2xl md:rounded-3xl p-2 md:p-3 shadow-xl md:shadow-2xl max-sm:mb-5">
+                <div className="aspect-square rounded-xl md:rounded-2xl bg-gradient-to-br from-pink-100 via-rose-50 to-pink-100 overflow-hidden relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-pink-200/30 to-rose-200/30 "></div>
+                  <Image
+                    src="https://ik.imagekit.io/ti3453sgoo/rajajihero.jpg"
+                    alt="Beautiful skin results"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
+                    priority
+                  />
+                </div>
+              </div>
+              {/* Stats Badge */}
+              <div className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 bg-white p-3 md:p-4 rounded-xl md:rounded-2xl shadow-lg md:shadow-xl border border-pink-100 ">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-[#B964DD] rounded-full flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-lg md:text-xl lg:text-2xl font-bold text-gray-800">92%</p>
+                    <p className="text-xs md:text-sm text-gray-500">Achievement Rate</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <div
-          className={`relative z-10 flex flex-col justify-center py-10 pr-10 pl-4 max-w-xl transition-all duration-700 ${
-            visible ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <p className="font-dm text-[11px] font-medium tracking-[0.18em] uppercase text-[#ec4899] mb-5 animate-fadeUp">
-            ✦ Premium Beauty Studio · Velachery ✦
-          </p>
+          {/* Mobile Buttons and Stats - Comes AFTER image on mobile */}
+          <div className="lg:hidden space-y-6">
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+              <a
+                href="#contact"
+                className="flex items-center justify-center gap-2 px-4 py-3 md:px-5 md:py-3.5 rounded-full
+                bg-gradient-to-r from-[#ec4899] to-[#be185d]
+                hover:bg-gradient-to-r hover:from-[#F849C1] hover:to-[#B964DD]
+                text-white font-semibold text-sm md:text-base
+                shadow-lg hover:shadow-xl
+                transition-all duration-300 w-full sm:w-auto"
+              >
+                <span>Book Your Consultation</span>
+                <TrendingUp className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
+              </a>
+              <a
+                href="tel:+91 89706 56789"
+                className="inline-flex items-center justify-center gap-2 px-4 py-3 md:px-5 md:py-3.5 
+                bg-white hover:bg-gray-50 text-gray-800 font-bold text-sm md:text-base 
+                rounded-full shadow-lg hover:shadow-xl transition-all duration-300 
+                border-2 border-gray-200 w-full sm:w-auto"
+              >
+                <span>Call Now</span>
+              </a>
+            </div>
 
-          <h1
-            className="font-playfair text-[52px] leading-[1.1] font-black text-gray-900 mb-6 animate-fadeUp delay-100"
-            style={{ letterSpacing: "-0.01em" }}
-          >
-            Discover{" "}
-            <span style={{ color: "#ffffff", backgroundColor: "#f472b6", paddingLeft: "10px", paddingRight: "10px" }}>
-              Velachery&apos;s Secret
-            </span>{" "}
-            To Beautiful Skin
-          </h1>
-
-          <p className="font-dm text-[14.5px] leading-[1.78] text-gray-500 max-w-sm max-sm:mb-5 mb-11 animate-fadeUp delay-200">
-            Achieve your desired look with our Expert Beauty Solutions
-          </p>
-
-          <div className="flex items-center gap-7 flex-wrap animate-fadeUp delay-300">
-            <button
-              onClick={handleBookNow}
-              className="font-dm font-medium text-sm text-white rounded-md px-9 py-[14px] transition-all duration-200 hover:-translate-y-0.5 active:scale-95"
-              style={{
-                background: "linear-gradient(135deg,#ec4899 0%,#be185d 100%)",
-                boxShadow: "0 8px 28px rgba(236,72,153,0.38)",
-              }}
-            >
-              Book Your Appointment Now!
-            </button>
-
-            <button className="group flex items-center gap-3 bg-transparent border-0 font-dm text-sm text-gray-800 hover:text-[#ec4899] transition-colors duration-200">
-              <PlayIcon />
-              Watch our story
-            </button>
+            {/* Stats Card */}
+            <div className="bg-white/90 backdrop-blur-md p-3 md:p-4 rounded-2xl shadow-xl border border-pink-100 w-full">
+              <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-4">
+                <div className="flex -space-x-2 md:-space-x-3">
+                  {icons.map((Icon, index) => (
+                    <div
+                      key={index}
+                      className="w-10 h-10
+                                rounded-full
+                                bg-gradient-to-r from-[#ec4899] to-[#be185d]
+                                flex items-center justify-center
+                                border-2 border-white"
+                    >
+                      <Icon className="w-5 h-5 text-white" />
+                    </div>
+                  ))}
+                </div>
+                <div className="text-center sm:text-left">
+                  <div className="flex justify-center sm:justify-start gap-0.5 md:gap-1 mb-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className="w-3 h-3 md:w-4 md:h-4 fill-yellow-400 text-yellow-400"
+                      />
+                    ))}
+                  </div>
+                  <p className="text-sm md:text-base font-bold text-gray-800">
+                    15K+ Clients Transformed
+                  </p>
+                  <p className="text-xs md:text-sm text-gray-500">Trusted by thousands</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

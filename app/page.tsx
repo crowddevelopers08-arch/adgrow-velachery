@@ -4,10 +4,13 @@ import GrohairTopBar from "@/components/header";
 import VelacheryBeautyBanner from "@/components/hero-section";
 import GloskinApartSection from "@/components/logoslider";
 import MobileActionBar from "@/components/mobile-bar";
+import ScrollToTop from "@/components/scroll-top";
 import AppointmentForm from "@/components/offer-highlight";
+import SkinOfferSection from "@/components/offersection";
 import WhoWeAreSection from "@/components/results-section";
 import CTABanner from "@/components/review";
 import BeautyServicesSection from "@/components/skinpopup";
+import Stats from "@/components/stats";
 import ImageGridCarousel from "@/components/video";
 import ClinicVideosResponsiveGrid from "@/components/videosection";
 import Script from "next/script";
@@ -30,6 +33,8 @@ export default function HomePage() {
       />
       <GrohairTopBar />
       <VelacheryBeautyBanner />
+      <Stats />
+      {/* <SkinOfferSection /> */}
       <BeautyServicesSection />
       <ImageGridCarousel />
       {/* <ClinicVideosResponsiveGrid /> */}
@@ -39,6 +44,7 @@ export default function HomePage() {
       <FAQSection />
       <ContactSection />
       <MobileActionBar />
+      <ScrollToTop />
     </main>
   );
 }

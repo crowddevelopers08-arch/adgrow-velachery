@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const DOCTOR_IMAGE = "https://ik.imagekit.io/7yen5ugz0/public/cosmetologist.jpg"; // replace with your actual image path
+const DOCTOR_IMAGE = "https://ik.imagekit.io/ti3453sgoo/cosmetologist.jpg"; // replace with your actual image path
 
 export default function CTABanner() {
   const ref = useRef(null);
@@ -199,6 +199,7 @@ export default function CTABanner() {
       `}</style>
 
       <section
+        id="reviews"
         ref={ref}
         className="cta-section-wrapper w-full py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-32"
         style={{

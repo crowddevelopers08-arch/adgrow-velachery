@@ -411,7 +411,7 @@ export default function ContactSection() {
         }
       `}</style>
 
-      <section className="ct">
+      <section id="contact" className="ct">
         <div className="ct-top">
           <div className="ct-logo">
             <div className="ct-logo-adv">Advanced</div>

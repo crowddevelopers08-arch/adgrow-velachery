@@ -178,7 +178,7 @@ export default function FAQSection() {
         }
       `}</style>
 
-      <section className="faq">
+      <section id="faq" className="faq">
         <div ref={ref}>
 
           {/* ── Heading ── */}

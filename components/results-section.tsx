@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const MODEL_IMAGE =
-  "https://ik.imagekit.io/7yen5ugz0/public/rejuvenating.jpg"; // replace with your actual image path
+  "https://ik.imagekit.io/ti3453sgoo/rejuvenating.jpg"; // replace with your actual image path
 
 const pillars = [
   {
@@ -371,7 +371,7 @@ export default function WhoWeAreSection() {
         }
       `}</style>
 
-      <section className="wwa2">
+      <section id="results" className="wwa2">
         <div ref={ref} className="wwa2-inner">
 
           {/* ══ LEFT — image ══ */}
