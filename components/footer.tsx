@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 ══════════════════════════════════════════════════════════ */
 function AppointmentForm() {
   const router = useRouter();
+  const clinicPhoneDisplay = "83908 56789";
+  const clinicPhoneHref = "tel:+918390856789";
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -19,6 +21,7 @@ function AppointmentForm() {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  const [dialogStep, setDialogStep] = useState<'confirm' | 'contact' | null>(null);
   
   // Capture page context on component mount
   const [pageContext, setPageContext] = useState({
@@ -48,16 +51,18 @@ function AppointmentForm() {
   };
 
   // ── updated handleSubmit with full tracking ──
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage(null);
-
+  const validateForm = () => {
     if (formData.pincode && !/^\d{6}$/.test(formData.pincode)) {
       setMessage({ type: 'error', text: 'Please enter a valid 6-digit pincode' });
-      setLoading(false);
-      return;
+      return false;
     }
+
+    return true;
+  };
+
+  const submitAppointment = async () => {
+    setLoading(true);
+    setMessage(null);
 
     try {
       // Prepare the payload with FULL tracking context
@@ -118,6 +123,7 @@ function AppointmentForm() {
         
         // Show success message briefly before redirect
         setMessage({ type: 'success', text: 'Appointment booked successfully! Redirecting...' });
+        setDialogStep(null);
         
         setTimeout(() => {
           router.push("/thank-you");
@@ -133,6 +139,22 @@ function AppointmentForm() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setMessage(null);
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setDialogStep('confirm');
+  };
+
+  const clearFormDetails = () => {
+    setFormData({ name: "", phone: "", email: "", treatment: "", pincode: "" });
+    setMessage(null);
   };
 
   // ── JSX: same fields, same attributes, same validation — only classNames match section design ──
@@ -233,6 +255,68 @@ function AppointmentForm() {
       <p className="rf-disclaimer">
         By submitting this form, you agree to our terms and consent to being contacted by our team.
       </p>
+
+      {dialogStep && (
+        <div className="rf-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="rf-dialog-title">
+          <div className="rf-modal">
+            {dialogStep === 'confirm' ? (
+              <>
+                <h3 id="rf-dialog-title" className="rf-modal-title">Would you like to submit your details?</h3>
+                <p className="rf-modal-text">
+                  Please confirm to send your appointment request to our clinic team.
+                </p>
+                <div className="rf-modal-actions">
+                  <button
+                    type="button"
+                    className="rf-modal-btn rf-modal-btn-primary"
+                    onClick={submitAppointment}
+                    disabled={loading}
+                  >
+                    Yes, Submit
+                  </button>
+                  <button
+                    type="button"
+                    className="rf-modal-btn rf-modal-btn-secondary"
+                    onClick={() => {
+                      clearFormDetails();
+                      setDialogStep('contact');
+                    }}
+                    disabled={loading}
+                  >
+                    No
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 id="rf-dialog-title" className="rf-modal-title">No problem. You can reach our clinic directly.</h3>
+                <p className="rf-modal-text">
+                  If you do not want to submit the form now, please call our clinic team and we will help you book your appointment.
+                </p>
+                <a href={clinicPhoneHref} className="rf-contact-link">
+                  Call {clinicPhoneDisplay}
+                </a>
+                <div className="rf-modal-actions">
+                  <button
+                    type="button"
+                    className="rf-modal-btn rf-modal-btn-primary"
+                    onClick={() => setDialogStep('confirm')}
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="button"
+                    className="rf-modal-btn rf-modal-btn-secondary"
+                    onClick={() => setDialogStep(null)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </form>
   );
 }
@@ -380,6 +464,55 @@ export default function ContactSection() {
         @keyframes rf-spin { to { transform:rotate(360deg); } }
 
         .rf-disclaimer { font-size:0.75rem; color:#b08090; text-align:center; line-height:1.5; font-weight:300; }
+        .rf-modal-backdrop {
+          position:fixed; inset:0; z-index:60;
+          display:flex; align-items:center; justify-content:center;
+          padding:20px;
+          background:rgba(26, 8, 18, 0.55);
+        }
+        .rf-modal {
+          width:min(100%, 430px);
+          background:#fff;
+          border:1px solid #f2d9e3;
+          border-radius:18px;
+          padding:28px 24px;
+          box-shadow:0 24px 80px rgba(192,23,75,0.2);
+          text-align:center;
+        }
+        .rf-modal-title {
+          font-family:'Playfair Display',serif;
+          font-size:1.55rem; font-weight:700;
+          color:#1a0812; line-height:1.3;
+          margin-bottom:12px;
+        }
+        .rf-modal-text {
+          font-size:0.95rem; color:#7a5060;
+          line-height:1.7; margin-bottom:18px;
+        }
+        .rf-contact-link {
+          display:inline-flex; align-items:center; justify-content:center;
+          margin-bottom:18px; padding:12px 18px;
+          border-radius:999px; text-decoration:none;
+          background:#fff1f6; color:#be185d;
+          font-weight:700; border:1px solid #f3c2d3;
+        }
+        .rf-modal-actions {
+          display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
+        }
+        .rf-modal-btn {
+          min-width:120px; border-radius:999px;
+          padding:11px 18px; font-size:0.92rem;
+          font-weight:700; cursor:pointer; transition:all 0.2s ease;
+        }
+        .rf-modal-btn-primary {
+          border:none; color:#fff;
+          background:linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+          box-shadow:0 8px 24px rgba(192,23,75,0.22);
+        }
+        .rf-modal-btn-secondary {
+          border:1px solid #e7c8d4; color:#7a5060; background:#fff;
+        }
+        .rf-modal-btn:disabled { opacity:0.6; cursor:not-allowed; }
 
         /* ── Footer ── */
         .ct-foot {

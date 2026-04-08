@@ -34,7 +34,7 @@ export default function HomePage() {
       <GrohairTopBar />
       <VelacheryBeautyBanner />
       <Stats />
-      {/* <SkinOfferSection /> */}
+      <SkinOfferSection />
       <BeautyServicesSection />
       <ImageGridCarousel />
       {/* <ClinicVideosResponsiveGrid /> */}
