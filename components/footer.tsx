@@ -38,7 +38,6 @@ function AppointmentForm() {
     });
   }, []);
 
-  // ── original handleChange — untouched ──
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     if (name === "phone") {
