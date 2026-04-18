@@ -91,7 +91,7 @@ function AppointmentForm() {
         utmTerm: new URLSearchParams(window.location.search).get('utm_term'),
         utmContent: new URLSearchParams(window.location.search).get('utm_content'),
         
-        // Device info
+
         screenSize: `${window.screen.width}x${window.screen.height}`,
         timestamp: new Date().toISOString(),
       };
