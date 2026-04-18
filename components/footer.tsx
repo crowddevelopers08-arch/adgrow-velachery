@@ -23,7 +23,6 @@ function AppointmentForm() {
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
   const [dialogStep, setDialogStep] = useState<'confirm' | 'contact' | null>(null);
   
-  // Capture page context on component mount
   const [pageContext, setPageContext] = useState({
     url: '',
     title: '',
