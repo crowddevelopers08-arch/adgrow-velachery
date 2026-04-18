@@ -8,9 +8,7 @@ const SimpleMap = () => {
       `}</style>
     <div className="w-full bg-white py-8 px-4 max-[470px]:pt-4"style={{fontFamily: "'Outfit', sans-serif"}}>
       <div className="max-w-4xl mx-auto">
-        {/* <h2 className="text-2xl font-bold text-center text-[#d3315c] mb-4">
-          Visit Us
-        </h2> */}
+
          <h2 className="text-2xl sm:text-3xl text-center pb-4 lg:text-4xl font-bold text-[#ea2424]">
                      Visit Us
                   </h2>
