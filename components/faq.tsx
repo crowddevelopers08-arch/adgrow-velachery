@@ -188,8 +188,6 @@ export default function FAQSection() {
               Frequently Asked <em>Questions</em>
             </h2>
           </div>
-
-          {/* ── 2-col accordion grid ── */}
           <div className="faq-grid">
             {faqs.map((f, i) => (
               <div
