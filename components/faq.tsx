@@ -181,7 +181,6 @@ export default function FAQSection() {
       <section id="faq" className="faq">
         <div ref={ref}>
 
-          {/* ── Heading ── */}
           <div className="faq-head">
             <div className={`faq-tag fi ${v ? "on" : ""} d1`}>Ask Us Anything</div>
             <h2 className={`faq-title fi ${v ? "on" : ""} d2`}>
